@@ -20,19 +20,19 @@ const hashOTP = (otp) => {
     .digest("hex");
 };
 
-// Send OTP to admin email
-const sendAdminOTP = async (email, otp) => {
+// Send an OTP to confirm an admin password change.
+const sendAdminPasswordChangeOTP = async (email, otp) => {
   await sendEmail({
     to: email,
-    subject: "VOLTIX Admin Login Verification",
+    subject: "VOLTIX Admin Password Change Verification",
 
-    text: `Your VOLTIX admin verification code is ${otp}. It expires in 5 minutes. If you did not request this code, ignore this email.`,
+    text: `Your VOLTIX admin password-change verification code is ${otp}. It expires in 5 minutes. If you did not request this change, ignore this email.`,
 
     html: `
       <div style="font-family:Arial,sans-serif;padding:24px">
-        <h2>VOLTIX Admin Verification</h2>
+        <h2>VOLTIX Admin Password Change</h2>
 
-        <p>Use this code to complete your admin login:</p>
+        <p>Use this code to confirm your admin password change:</p>
 
         <h1 style="letter-spacing:6px">
           ${otp}
@@ -40,7 +40,7 @@ const sendAdminOTP = async (email, otp) => {
 
         <p>This code expires in 5 minutes.</p>
 
-        <p>If you did not request this code, ignore this email.</p>
+        <p>If you did not request this change, ignore this email.</p>
       </div>
     `,
   });
@@ -49,5 +49,5 @@ const sendAdminOTP = async (email, otp) => {
 module.exports = {
   generateOTP,
   hashOTP,
-  sendAdminOTP,
+  sendAdminPasswordChangeOTP,
 };

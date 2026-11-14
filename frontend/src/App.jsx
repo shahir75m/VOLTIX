@@ -9,7 +9,7 @@ import {
 // ADMIN PAGES
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
-const AdminVerifyOTP = lazy(() => import("./pages/admin/AdminVerifyOTP"));
+const AdminSecurity = lazy(() => import("./pages/admin/AdminSecurity"));
 const AdminUsers = lazy(() => import("./pages/admin/AdminUsers"));
 const AdminCategories = lazy(() => import("./pages/admin/AdminCategories"));
 const AdminProducts = lazy(() => import("./pages/admin/AdminProducts"));
@@ -89,10 +89,11 @@ function App() {
 
         {/* ADMIN AUTHENTICATION */}
         <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/verify-otp" element={<AdminVerifyOTP />} />
+        <Route path="/admin/verify-otp" element={<Navigate to="/admin/login" replace />} />
 
         {/* ADMIN MANAGEMENT */}
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/security" element={<AdminSecurity />} />
         <Route path="/admin/users" element={<AdminUsers />} />
         <Route path="/admin/categories" element={<AdminCategories />} />
         <Route path="/admin/products" element={<AdminProducts />} />

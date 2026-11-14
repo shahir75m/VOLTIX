@@ -97,3 +97,25 @@ test("login endpoints reject invalid email input before querying", async () => {
   assert.equal(customerResponse.status, 400);
   assert.equal(adminResponse.status, 400);
 });
+
+test("admin password change requires an authenticated session and login OTP endpoint is removed", async () => {
+  const passwordChangeResponse = await fetch(
+    `${baseUrl}/api/admin/password-change/request-otp`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        currentPassword: "current-password",
+        newPassword: "new-password-123",
+      }),
+    }
+  );
+  const oldOtpResponse = await fetch(`${baseUrl}/api/admin/verify-otp`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ challenge: "a".repeat(64), otp: "123456" }),
+  });
+
+  assert.equal(passwordChangeResponse.status, 401);
+  assert.equal(oldOtpResponse.status, 404);
+});

@@ -14,12 +14,16 @@ const adminOTPSchema = new mongoose.Schema(
       required: true,
       select: false,
     },
+    newPasswordHash: {
+      type: String,
+      select: false,
+    },
     challengeHash: {
-  type: String,
-  required: true,
-  unique: true,
-  select: false,
-},
+      type: String,
+      required: true,
+      unique: true,
+      select: false,
+    },
     expiresAt: {
       type: Date,
       required: true,

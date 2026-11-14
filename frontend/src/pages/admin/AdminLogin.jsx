@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import BrandLogo from "../../components/BrandLogo";
 import { API_BASE_URL } from "../../config/api";
+import { invalidateAdminSession } from "../../utils/adminSession";
 import "./AdminLogin.css";
 import Icon from "../../components/Icon";
 
@@ -37,26 +38,13 @@ function AdminLogin() {
 
       const data = await response.json();
 
-      if (!response.ok) {
-  throw new Error(data.message || "Login failed");
-}
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Login failed");
+      }
 
-if (data.requiresOTP && data.challenge) {
-  setPassword("");
-
-  navigate("/admin/verify-otp", {
-    replace: true,
-    state: {
-      challenge: data.challenge,
-      email: email.trim(),
-      expiresIn: data.expiresIn,
-    },
-  });
-
-  return;
-}
-
-throw new Error("Unexpected login response");
+      invalidateAdminSession();
+      setPassword("");
+      navigate("/admin/dashboard", { replace: true });
     } catch (err) {
       setError(err.message || "Something went wrong");
     } finally {
@@ -79,8 +67,7 @@ throw new Error("Unexpected login response");
           <h2>Admin login</h2>
 
           <p className="voltix-login-description">
-            Step 1 of 2. After your password, we send a
-            one-time code to confirm it is you.
+            Sign in with your admin email and password.
           </p>
 
           <form onSubmit={handleSubmit}>
@@ -132,7 +119,7 @@ throw new Error("Unexpected login response");
             >
               {loading
                 ? "Signing in..."
-                : "Continue and send OTP"}
+                : "Sign in"}
             </button>
 
           </form>

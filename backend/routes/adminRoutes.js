@@ -4,9 +4,12 @@ const rateLimit = require("express-rate-limit");
 const {
   adminLogin,
   adminLogout,
-  verifyAdminOTP,
-  resendAdminOTP,
 } = require("../controllers/adminController");
+const {
+  requestAdminPasswordChangeOTP,
+  verifyAdminPasswordChangeOTP,
+  resendAdminPasswordChangeOTP,
+} = require("../controllers/adminPasswordController");
 const { getDashboard } = require("../controllers/adminDashboardController");
 
 const {
@@ -67,8 +70,19 @@ const loginLimiter = rateLimit({
   },
 });
 
-// OTP Verification Rate Limiter
-const otpLimiter = rateLimit({
+const passwordChangeRequestLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 5,
+  standardHeaders: "draft-8",
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: "Too many password-change requests. Try again later.",
+  },
+});
+
+// Password-change OTP verification Rate Limiter
+const passwordChangeOtpLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 5,
   standardHeaders: "draft-8",
@@ -77,31 +91,45 @@ const otpLimiter = rateLimit({
   handler: (req, res) => {
     return res.status(429).json({
       success: false,
-      message: "Too many OTP attempts. Try again later.",
+      message: "Too many verification attempts. Try again later.",
     });
   },
 });
 
-// OTP Resend Rate Limiter
-const resendLimiter = rateLimit({
+// Password-change OTP resend Rate Limiter
+const passwordChangeResendLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 3,
   standardHeaders: "draft-8",
   legacyHeaders: false,
   message: {
     success: false,
-    message: "Too many resend requests. Try again later.",
+    message: "Too many verification-code requests. Try again later.",
   },
 });
 
-// STEP 1: Verify email and password
+// Verify admin credentials and create a session.
 router.post("/login", loginLimiter, adminLogin);
 
-// STEP 2: Verify OTP
-router.post("/verify-otp", otpLimiter, verifyAdminOTP);
-
-// Resend OTP
-router.post("/resend-otp", resendLimiter, resendAdminOTP);
+// Admin password changes require the current password and an email OTP.
+router.post(
+  "/password-change/request-otp",
+  protectAdmin,
+  passwordChangeRequestLimiter,
+  requestAdminPasswordChangeOTP
+);
+router.post(
+  "/password-change/verify-otp",
+  protectAdmin,
+  passwordChangeOtpLimiter,
+  verifyAdminPasswordChangeOTP
+);
+router.post(
+  "/password-change/resend-otp",
+  protectAdmin,
+  passwordChangeResendLimiter,
+  resendAdminPasswordChangeOTP
+);
 
 // Admin Logout
 router.post("/logout", protectAdmin, adminLogout);

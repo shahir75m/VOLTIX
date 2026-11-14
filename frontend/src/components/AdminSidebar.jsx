@@ -15,6 +15,7 @@ const MENU = [
   { label: "Coupons", path: "/admin/coupons" },
   { label: "Offers", path: "/admin/offers" },
   { label: "Users", path: "/admin/users" },
+  { label: "Security", path: "/admin/security" },
 ];
 
 export default function AdminSidebar({ active }) {
