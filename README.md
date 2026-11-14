@@ -43,6 +43,12 @@ npm run lint
 npm run build
 ```
 
+## Deployment (testing setup)
+
+- **Frontend:** Create a Vercel project from this repository and set its root directory to `frontend`. Add `VITE_API_URL` using the deployed backend URL. Add `VITE_GOOGLE_CLIENT_ID` only if Google sign-in is enabled.
+- **Backend:** The root `render.yaml` defines a Render web service using the free plan. It can sleep when idle, so it is for testing only; the order-expiry interval is not guaranteed to run while the service is asleep. Use an always-on plan or move that job to a scheduler before relying on it in production.
+- Set the backend environment variables requested by the Render Blueprint. After Vercel gives you the frontend URL, use it as `FRONTEND_URL` in Render. Create the initial admin account from the backend service shell with `node scripts/createAdmin.js`.
+
 ## Environment variables and credentials
 
 Never commit `.env` files or put private credentials in frontend variables. Frontend variables such as `VITE_API_URL` and `VITE_GOOGLE_CLIENT_ID` are included in browser code. Use the `.env.example` files as templates and configure production secrets in your hosting provider.
