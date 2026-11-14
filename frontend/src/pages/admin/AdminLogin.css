@@ -1,0 +1,264 @@
+/* Main Background */
+
+.voltix-admin-login {
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 24px 20px;
+
+  background: #101419;
+  font-family: "Inter", sans-serif;
+}
+
+.voltix-admin-login * {
+  box-sizing: border-box;
+}
+
+/* Main Container */
+
+.voltix-login-container {
+  width: 100%;
+  max-width: 540px;
+}
+
+/* Brand */
+
+.voltix-login-brand {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.voltix-login-brand h1 {
+  font-size: 40px;
+  font-weight: 800;
+  color: #d6ff36;
+  margin: 0;
+  letter-spacing: -1px;
+}
+
+.voltix-login-brand p {
+  font-size: 18px;
+  color: #aab0bb;
+  margin: 8px 0 0;
+}
+
+/* White Card */
+
+.voltix-login-card {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 20px;
+
+  padding: 40px;
+
+  color: #101419;
+}
+
+.voltix-login-card h2 {
+  font-size: 36px;
+  font-weight: 750;
+  margin: 0 0 10px;
+  letter-spacing: -1px;
+}
+
+/* Description */
+
+.voltix-login-description {
+  color: #667085;
+  font-size: 18px;
+  line-height: 1.65;
+  margin: 0 0 28px;
+}
+
+/* Form */
+
+.voltix-form-group {
+  margin-bottom: 26px;
+}
+
+.voltix-form-group label {
+  display: block;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 9px;
+}
+
+.voltix-form-group input {
+  width: 100%;
+  height: 59px;
+
+  border: 1.5px solid #cbd2dc;
+  border-radius: 10px;
+
+  padding: 0 17px;
+
+  background: #ffffff;
+  color: #101419;
+
+  font-size: 18px;
+  outline: none;
+
+  transition: border-color 0.2s;
+}
+
+.voltix-form-group input::placeholder {
+  color: #667085;
+}
+
+.voltix-form-group input:focus {
+  border-color: #101419;
+}
+
+/* Submit Button */
+
+.voltix-login-button {
+  width: 100%;
+  height: 64px;
+
+  background: #101419;
+  color: #ffffff;
+
+  border: none;
+  border-radius: 10px;
+
+  font-size: 19px;
+  font-weight: 600;
+
+  cursor: pointer;
+  margin-top: 0;
+}
+
+.voltix-login-button:hover {
+  background: #252b33;
+}
+
+.voltix-login-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Error */
+
+.voltix-login-error {
+  color: #dc2626;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+/* Forgot Password */
+
+.voltix-forgot-password {
+  text-align: center;
+  margin-top: 28px;
+}
+
+.voltix-forgot-password span {
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: default;
+}
+
+/* Back to Store */
+
+.voltix-back-store {
+  text-align: center;
+  margin-top: 32px;
+}
+
+.voltix-back-store a {
+  color: #aab0bb;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.voltix-back-store a:hover {
+  color: #ffffff;
+}
+
+/* Mobile Responsive */
+
+@media (max-width: 600px) {
+  .voltix-admin-login {
+    padding: 40px 16px;
+  }
+
+  .voltix-login-card {
+    padding: 28px 24px;
+  }
+
+  .voltix-login-card h2 {
+    font-size: 30px;
+  }
+
+  .voltix-login-description {
+    font-size: 15px;
+  }
+
+  .voltix-form-group input {
+    font-size: 16px;
+  }
+
+  .voltix-login-button {
+    font-size: 16px;
+  }
+}
+/* Figma Design Alignment Fix */
+
+.voltix-admin-login {
+  width: 100%;
+  min-height: 100vh;
+  background: #101419;
+  text-align: left;
+}
+
+.voltix-login-container {
+  width: 100%;
+  max-width: 540px;
+}
+
+.voltix-login-card {
+  background: #ffffff;
+  text-align: left;
+}
+
+.voltix-login-card h2 {
+  color: #101419;
+  text-align: left;
+}
+
+.voltix-login-description {
+  color: #667085;
+  text-align: left;
+}
+
+.voltix-form-group {
+  text-align: left;
+}
+
+.voltix-form-group label {
+  color: #101419;
+  text-align: left;
+}
+
+.voltix-form-group input {
+  background-color: #ffffff;
+  color: #101419;
+  border: 1.5px solid #cbd2dc;
+  text-align: left;
+}
+
+.voltix-form-group input::placeholder {
+  color: #667085;
+  opacity: 1;
+}
+
+.voltix-login-button {
+  background-color: #101419;
+  color: #ffffff;
+}

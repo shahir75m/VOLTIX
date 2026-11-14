@@ -1,0 +1,979 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@400;600;700&display=swap");
+
+/* ==============================
+   VOLTIX PROFILE — BASE
+================================ */
+
+.voltix-profile-page {
+  --vp-dark: #11151c;
+  --vp-lime: #d4f53c;
+  --vp-background: #f4f5f7;
+  --vp-border: #e2e5ea;
+  --vp-text-muted: #566070;
+
+  width: 100%;
+  min-height: 100vh;
+  background: var(--vp-background);
+  color: var(--vp-dark);
+  font-family: "Manrope", sans-serif;
+  font-size: 15px;
+}
+
+.voltix-profile-page,
+.voltix-profile-page * {
+  box-sizing: border-box;
+}
+
+.voltix-profile-page button,
+.voltix-profile-page input {
+  font: inherit;
+}
+
+.voltix-profile-page button {
+  cursor: pointer;
+}
+
+.voltix-profile-page button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.voltix-profile-page a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.voltix-profile-page h1,
+.voltix-profile-page h2,
+.voltix-profile-page h3,
+.voltix-profile-page p {
+  margin: 0;
+}
+
+/* ==============================
+   HEADER
+================================ */
+
+.voltix-profile-header {
+  width: 100%;
+}
+
+.voltix-profile-topbar {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  min-height: 72px;
+  padding: 14px 32px;
+  background: var(--vp-dark);
+}
+
+.voltix-profile-logo {
+  flex-shrink: 0;
+  font-family: "Sora", sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 33px;
+  color: var(--vp-lime) !important;
+}
+
+.voltix-profile-search {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+}
+
+.voltix-profile-search input {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  padding: 0 16px;
+  background: #ffffff;
+  border: none;
+  border-radius: 8px 0 0 8px;
+  outline: none;
+  color: var(--vp-dark);
+  font-size: 15px;
+}
+
+.voltix-profile-search input::placeholder {
+  color: var(--vp-text-muted);
+}
+
+.voltix-profile-search button {
+  flex-shrink: 0;
+  height: 44px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 0 8px 8px 0;
+  background: var(--vp-lime);
+  color: var(--vp-dark);
+  font-weight: 700;
+}
+
+.voltix-profile-topnav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-shrink: 0;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.voltix-profile-topnav a {
+  color: #ffffff;
+}
+
+/* ==============================
+   CATEGORY BAR
+================================ */
+
+.voltix-profile-categories {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  min-height: 49px;
+  padding: 0 32px;
+  background: #ffffff;
+}
+
+.voltix-profile-categories span {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ==============================
+   MAIN CONTENT
+================================ */
+
+.voltix-profile-content {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px 32px 64px;
+}
+
+.voltix-profile-content > h1 {
+  margin-bottom: 24px;
+  font-family: "Sora", sans-serif;
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 43px;
+}
+
+.voltix-profile-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+  width: 100%;
+}
+
+/* ==============================
+   ACCOUNT SIDEBAR
+================================ */
+
+.voltix-account-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 0 0 220px;
+  padding: 10px;
+  background: #ffffff;
+  border: 1px solid var(--vp-border);
+  border-radius: 12px;
+}
+
+.voltix-account-sidebar a,
+.voltix-account-sidebar span,
+.voltix-account-sidebar button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--vp-dark);
+  text-align: left;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.voltix-account-sidebar .active {
+  background: var(--vp-dark);
+  color: #ffffff;
+}
+
+.voltix-account-sidebar button {
+  color: #b42318;
+}
+
+/* ==============================
+   PROFILE SECTIONS
+================================ */
+
+.voltix-profile-sections {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.voltix-profile-card {
+  width: 100%;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid var(--vp-border);
+  border-radius: 12px;
+}
+
+.voltix-profile-card > h2,
+.voltix-profile-card-heading h2 {
+  font-family: "Sora", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 25px;
+}
+
+.voltix-profile-card > h2 {
+  margin-bottom: 16px;
+}
+
+/* ==============================
+   PERSONAL DETAILS
+================================ */
+
+.voltix-profile-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.voltix-profile-fields.two-columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.voltix-profile-fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 19px;
+}
+
+.voltix-profile-fields input {
+  width: 100%;
+  height: 46px;
+  padding: 0 14px;
+  background: #ffffff;
+  border: 1px solid #c9ced6;
+  border-radius: 8px;
+  outline: none;
+  color: var(--vp-dark);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.voltix-profile-fields input::placeholder {
+  color: var(--vp-text-muted);
+}
+
+.voltix-profile-fields input:focus {
+  border-color: var(--vp-dark);
+}
+
+.voltix-profile-fields input[readonly] {
+  background: #f9fafb;
+  color: var(--vp-text-muted);
+}
+
+/* ==============================
+   BUTTONS
+================================ */
+
+.voltix-profile-primary-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 46px;
+  padding: 0 24px;
+  background: var(--vp-dark);
+  border: none;
+  border-radius: 8px;
+  color: #ffff;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 20px;
+}
+
+.voltix-profile-outline-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 20px;
+  background: #ffff;
+  border: 1.5px solid var(--vp-dark);
+  border-radius: 8px;
+  color: var(--vp-dark);
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ==============================
+   SAVED ADDRESSES
+================================ */
+
+.voltix-profile-card-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.voltix-profile-muted {
+  color: var(--vp-text-muted);
+  font-size: 14px;
+  line-height: 22px;
+}
+
+/* ==============================
+   CHANGE PASSWORD
+================================ */
+
+.voltix-profile-password-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.voltix-profile-password-actions a {
+  color: var(--vp-dark);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* ==============================
+   MESSAGES
+================================ */
+
+.voltix-profile-error {
+  margin-bottom: 12px !important;
+  color: #b42318;
+  font-size: 14px;
+}
+
+.voltix-profile-success {
+  margin-bottom: 12px !important;
+  color: #16703c;
+  font-size: 14px;
+}
+
+.voltix-profile-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f4f5f7;
+  color: #11151c;
+  font-family: "Manrope", sans-serif;
+  font-size: 16px;
+}
+
+/* ==============================
+   FOOTER
+================================ */
+
+.voltix-profile-footer {
+  width: 100%;
+  background: var(--vp-dark);
+  color: #ffffff;
+}
+
+.voltix-profile-footer-columns {
+  display: grid;
+  grid-template-columns: 420px repeat(3, minmax(0, 1fr));
+  gap: 40px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 48px 32px 32px;
+}
+
+.voltix-profile-footer-columns > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+}
+
+.voltix-profile-footer-columns > div:first-child {
+  gap: 12px;
+}
+
+.voltix-profile-footer-columns h2 {
+  font-family: "Sora", sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 30px;
+  color: var(--vp-lime);
+}
+
+.voltix-profile-footer-columns h3 {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 20px;
+}
+
+.voltix-profile-footer-columns p,
+.voltix-profile-footer-columns a {
+  color: #c3c9d4;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 19px;
+}
+
+.voltix-profile-footer-columns > div:first-child p {
+  line-height: 22px;
+}
+
+.voltix-profile-footer-bottom {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px 32px;
+  border-top: 1px solid #2a313d;
+  color: #c3c9d4;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+/* ==============================
+   RESPONSIVE DESIGN
+================================ */
+
+@media (max-width: 1100px) {
+  .voltix-profile-topbar {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .voltix-profile-search {
+    flex-basis: 50%;
+  }
+
+  .voltix-profile-topnav {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .voltix-profile-footer-columns {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .voltix-profile-topbar {
+    padding: 16px;
+  }
+
+  .voltix-profile-search {
+    flex-basis: 100%;
+    order: 3;
+  }
+
+  .voltix-profile-topnav {
+    gap: 12px;
+    font-size: 13px;
+  }
+
+  .voltix-profile-categories {
+    gap: 20px;
+    padding: 0 16px;
+    overflow-x: auto;
+  }
+
+  .voltix-profile-content {
+    padding: 24px 16px 48px;
+  }
+
+  .voltix-profile-content > h1 {
+    font-size: 28px;
+  }
+
+  .voltix-profile-main {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .voltix-account-sidebar {
+    flex: none;
+    width: 100%;
+  }
+
+  .voltix-profile-sections {
+    width: 100%;
+  }
+
+  .voltix-profile-fields,
+  .voltix-profile-fields.two-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .voltix-profile-card {
+    padding: 20px;
+  }
+
+  .voltix-profile-footer-columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 32px 16px;
+  }
+
+  .voltix-profile-footer-bottom {
+    padding: 20px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .voltix-profile-card-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .voltix-profile-footer-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .voltix-profile-topnav {
+    gap: 10px;
+  }
+}
+/* ==================================
+   VOLTIX PROFILE HEADING COLOR FIX
+================================== */
+
+.voltix-profile-page .voltix-profile-content > h1 {
+  color: #11151c;
+  font-family: "Sora", sans-serif;
+  font-size: 34px;
+  font-weight: 700;
+}
+
+.voltix-profile-page .voltix-profile-card > h2,
+.voltix-profile-page .voltix-profile-card-heading > h2 {
+  color: #11151c;
+  font-family: "Sora", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+
+
+.voltix-address-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.voltix-address-card {
+  background: #ffffff;
+  border: 1px solid #dce0e6;
+  border-radius: 9px;
+  padding: 16px;
+  min-width: 0;
+}
+
+.voltix-address-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.voltix-address-top strong {
+  font-family: "Manrope", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #11151c;
+}
+
+.voltix-address-default {
+  display: inline-flex;
+  align-items: center;
+  background: #11151c;
+  color: #d4f53c;
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.voltix-address-saved {
+  display: inline-flex;
+  align-items: center;
+  background: #e9edf2;
+  color: #485363;
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.voltix-address-card p {
+  font-family: "Manrope", sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #647084;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.voltix-address-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.voltix-address-actions button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-family: "Manrope", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #11151c;
+  cursor: pointer;
+}
+
+.voltix-address-actions button:last-child {
+  color: #c62828;
+}
+
+.voltix-address-actions button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Responsive layout */
+
+@media (max-width: 768px) {
+  .voltix-address-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ADD ADDRESS FORM */
+
+.voltix-address-form {
+  margin: 20px 0;
+  padding: 20px;
+  background: #f9fafb;
+  border: 1px solid #dce0e6;
+  border-radius: 10px;
+}
+
+.voltix-address-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.voltix-address-form-header h3 {
+  margin: 0;
+  font-size: 17px;
+  color: #11151c;
+}
+
+.voltix-address-form-header button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.voltix-address-form-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.voltix-address-form-fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #11151c;
+}
+
+.voltix-address-form-fields input,
+.voltix-address-form-fields select {
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #dce0e6;
+  border-radius: 7px;
+  background: #fff;
+  font-family: "Manrope", sans-serif;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+.voltix-address-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.voltix-address-form-actions button {
+  padding: 11px 18px;
+  border-radius: 7px;
+  border: 1px solid #11151c;
+  background: #fff;
+  cursor: pointer;
+}
+
+.voltix-address-form-actions button:last-child {
+  background: #11151c;
+  color: #fff;
+}
+
+.voltix-address-form-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .voltix-address-form-fields {
+    grid-template-columns: 1fr;
+  }
+}
+
+.voltix-address-form-fields .voltix-address-default-option {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  grid-column: 1 / -1;
+  cursor: pointer;
+}
+
+.voltix-address-default-option input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #11151c;
+}
+
+
+
+.voltix-profile-photo-section {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 0;
+  margin-bottom: 22px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.voltix-profile-avatar {
+  width: 90px;
+  height: 90px;
+  min-width: 90px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #eef2ff;
+  border: 2px solid #e5e7eb;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.voltix-profile-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.voltix-profile-avatar-placeholder {
+  font-size: 36px;
+  font-weight: 700;
+  color: #4338ca;
+}
+
+.voltix-profile-photo-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.voltix-profile-photo-info strong {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.voltix-profile-photo-info p {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .voltix-profile-avatar {
+    width: 72px;
+    height: 72px;
+    min-width: 72px;
+  }
+
+  .voltix-profile-avatar-placeholder {
+    font-size: 28px;
+  }
+
+  .voltix-profile-photo-section {
+    gap: 12px;
+  }
+}
+
+.voltix-remove-photo-btn {
+  margin-top: 10px;
+  padding: 9px 16px;
+  background: transparent;
+  color: #dc2626;
+  border: 1px solid #dc2626;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.voltix-remove-photo-btn:hover {
+  background: #fef2f2;
+}
+
+.voltix-remove-photo-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+/* PROFILE PHOTO BUTTON ALIGNMENT */
+
+.voltix-profile-photo-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.voltix-profile-photo-actions button {
+  width: auto;
+  min-width: 125px;
+  margin: 0;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* CHANGE PHOTO */
+
+.voltix-profile-photo-actions .voltix-change-photo-btn {
+  background: #111827;
+  color: #ffffff;
+  border: 1px solid #111827;
+}
+
+.voltix-profile-photo-actions .voltix-change-photo-btn:hover {
+  background: #374151;
+}
+
+/* REMOVE PHOTO */
+
+.voltix-profile-photo-actions .voltix-remove-photo-btn {
+  background: #ffffff;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.voltix-profile-photo-actions .voltix-remove-photo-btn:hover {
+  background: #fef2f2;
+}
+
+/* MOBILE */
+
+@media (max-width: 480px) {
+  .voltix-profile-photo-actions {
+    gap: 8px;
+  }
+
+  .voltix-profile-photo-actions button {
+    min-width: 0;
+    padding: 9px 12px;
+  }
+}
+
+.voltix-profile-form-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.voltix-profile-form-actions .voltix-profile-primary-btn,
+.voltix-profile-form-actions .voltix-change-email-btn {
+  width: auto;
+  min-width: 140px;
+  margin: 0;
+  padding: 12px 20px;
+  color:#ffffff;
+}
+
+.voltix-profile-form-actions .voltix-profile-primary-btn:hover {
+  width: auto;
+  min-width: 140px;
+  margin: 0;
+  padding: 12px 20px;
+  color:#ffffff;
+  background: #141e30
+}
+
+.voltix-profile-form-actions .voltix-change-email-btn {
+  background: #ffffff;
+  color: #111827;
+  border: 1px solid #111827;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.voltix-profile-form-actions .voltix-change-email-btn:hover {
+  background: #f3f4f6;
+}

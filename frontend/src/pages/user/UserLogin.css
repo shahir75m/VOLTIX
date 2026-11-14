@@ -1,0 +1,482 @@
+/* VOLTIX USER LOGIN PAGE */
+
+.voltix-user-login-page {
+  min-height: 100vh;
+  width: 100%;
+  background: #f3f4f6;
+  color: #141820;
+  font-family: "Inter", Arial, sans-serif;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.voltix-user-login-page *,
+.voltix-user-login-page *::before,
+.voltix-user-login-page *::after {
+  box-sizing: border-box;
+}
+
+/*  HEADER   */
+
+.voltix-user-header {
+  width: 100%;
+  background: #ffffff;
+}
+
+.voltix-user-navbar {
+  min-height: 68px;
+  padding: 10px 3.2%;
+
+  display: flex;
+  align-items: center;
+  gap: 28px;
+
+  background: #101419;
+}
+
+.voltix-user-logo {
+  flex-shrink: 0;
+
+  color: #d6ff36;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+  text-decoration: none;
+}
+
+.voltix-user-search {
+  display: flex;
+  flex: 1;
+  min-width: 150px;
+  height: 39px;
+}
+
+.voltix-user-search input {
+  width: 100%;
+  min-width: 0;
+  padding: 0 14px;
+
+  background: #ffffff;
+  color: #141820;
+
+  border: 1px solid #d5dae2;
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+}
+
+.voltix-user-search input::placeholder {
+  color: #667085;
+}
+
+.voltix-user-search button {
+  padding: 0 19px;
+
+  background: #d6ff36;
+  color: #101419;
+
+  border: none;
+  border-radius: 0 8px 8px 0;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.voltix-user-header-links {
+  display: flex;
+  align-items: center;
+  gap: 23px;
+  flex-shrink: 0;
+}
+
+.voltix-user-header-links a {
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.voltix-user-header-links a:hover {
+  color: #d6ff36;
+}
+
+/*  CATEGORY NAVIGATION  */
+
+.voltix-user-categories {
+  display: flex;
+  align-items: center;
+  gap: 29px;
+
+  min-height: 41px;
+  padding: 0 3.2%;
+
+  background: #ffffff;
+  border-bottom: 1px solid #e1e5eb;
+
+  overflow-x: auto;
+}
+
+.voltix-user-categories a {
+  flex-shrink: 0;
+
+  color: #141820;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.voltix-user-categories a:hover {
+  color: #536600;
+}
+
+/* MAIN LOGIN AREA */
+
+.voltix-user-login-main {
+  flex: 1;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  padding: 48px 20px 60px;
+
+  background: #f3f4f6;
+}
+
+/* LOGIN CARD */
+
+.voltix-user-login-card {
+  width: 100%;
+  max-width: 405px;
+
+  padding: 30px 27px;
+
+  background: #ffffff;
+  border: 1px solid #e1e5eb;
+  border-radius: 14px;
+}
+
+.voltix-user-login-card h1 {
+  margin: 0 0 7px;
+
+  color: #141820;
+  font-size: 27px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.6px;
+}
+
+.voltix-user-login-subtitle {
+  margin: 0 0 21px;
+
+  color: #667085;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* FORM INPUTS */
+
+.voltix-user-form-group {
+  margin-bottom: 18px;
+}
+
+.voltix-user-form-group label {
+  display: block;
+  margin-bottom: 6px;
+
+  color: #141820;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.voltix-user-form-group input {
+  width: 100%;
+  height: 41px;
+
+  padding: 0 12px;
+
+  background: #ffffff;
+  color: #141820;
+
+  border: 1px solid #cbd2dc;
+  border-radius: 7px;
+
+  font-family: inherit;
+  font-size: 13px;
+
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.voltix-user-form-group input:focus {
+  border-color: #101419;
+}
+
+.voltix-user-form-group input::placeholder {
+  color: #667085;
+}
+
+.voltix-user-password-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.voltix-user-password-label a {
+  margin-bottom: 6px;
+
+  color: #141820;
+  font-size: 12px;
+  font-weight: 600;
+
+  text-decoration: underline;
+}
+
+/* LOGIN BUTTON */
+
+.voltix-user-login-button {
+  width: 100%;
+  height: 45px;
+
+  margin-top: 1px;
+
+  background: #101419;
+  color: #ffffff;
+
+  border: none;
+  border-radius: 7px;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.voltix-user-login-button:hover {
+  background: #252b33;
+}
+
+/*  GOOGLE LOGIN  */
+
+.voltix-user-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin: 18px 0;
+
+  color: #667085;
+  font-size: 12px;
+}
+
+.voltix-user-divider::before,
+.voltix-user-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e1e5eb;
+}
+
+.voltix-google-button {
+  width: 100%;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  background: #ffffff;
+  color: #141820;
+
+  border: 1px solid #cbd2dc;
+  border-radius: 7px;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.voltix-google-button:hover {
+  background: #f8f9fa;
+}
+
+.voltix-google-icon {
+  font-size: 21px;
+  font-weight: 800;
+  color: #4285f4;
+}
+
+/*  CREATE ACCOUNT  */
+
+.voltix-user-register-link {
+  margin: 20px 0 0;
+
+  color: #667085;
+  font-size: 13px;
+  text-align: center;
+}
+
+.voltix-user-register-link a {
+  color: #141820;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/*  FOOTER   */
+
+.voltix-user-footer {
+  width: 100%;
+  background: #101419;
+  color: #ffffff;
+}
+
+.voltix-user-footer-content {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr 1fr 1fr;
+  gap: 40px;
+
+  padding: 40px 3.2% 44px;
+}
+
+.voltix-footer-about h2 {
+  margin: 0 0 12px;
+
+  color: #d6ff36;
+  font-size: 23px;
+  font-weight: 800;
+}
+
+.voltix-footer-about p {
+  max-width: 350px;
+  margin: 0;
+
+  color: #a3aab5;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.voltix-footer-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.voltix-footer-column h3 {
+  margin: 0 0 2px;
+
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.voltix-footer-column a,
+.voltix-footer-column span {
+  color: #a3aab5;
+  font-size: 12px;
+  line-height: 1.5;
+  text-decoration: none;
+}
+
+.voltix-footer-column a:hover {
+  color: #d6ff36;
+}
+
+.voltix-user-footer-bottom {
+  padding: 19px 3.2%;
+
+  border-top: 1px solid #252b35;
+
+  color: #a3aab5;
+  font-size: 11px;
+}
+
+  /* RESPONSIVE */
+
+@media (max-width: 1000px) {
+  .voltix-user-navbar {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .voltix-user-search {
+    order: 3;
+    flex-basis: 100%;
+  }
+
+  .voltix-user-header-links {
+    margin-left: auto;
+    gap: 14px;
+  }
+
+  .voltix-user-footer-content {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 30px;
+  }
+}
+
+@media (max-width: 600px) {
+  .voltix-user-navbar {
+    padding: 15px;
+  }
+
+  .voltix-user-logo {
+    font-size: 22px;
+  }
+
+  .voltix-user-header-links {
+    gap: 12px;
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  .voltix-user-header-links a {
+    font-size: 12px;
+  }
+
+  .voltix-user-categories {
+    gap: 22px;
+    padding: 0 15px;
+  }
+
+  .voltix-user-login-main {
+    padding: 30px 15px 45px;
+  }
+
+  .voltix-user-login-card {
+    padding: 25px 20px;
+  }
+
+  .voltix-user-login-card h1 {
+    font-size: 25px;
+  }
+
+  .voltix-user-footer-content {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px 18px;
+    padding: 35px 20px;
+  }
+
+  .voltix-footer-about {
+    grid-column: 1 / -1;
+  }
+
+  .voltix-user-footer-bottom {
+    padding: 18px 20px;
+  }
+}

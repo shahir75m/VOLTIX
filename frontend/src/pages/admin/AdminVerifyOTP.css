@@ -1,0 +1,404 @@
+/* ==========================================
+   VOLTIX ADMIN OTP VERIFICATION
+   CLEAN & RESPONSIVE DESIGN
+========================================== */
+
+/* PAGE */
+
+.voltix-otp-page {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  margin: 0;
+  padding: 32px 20px;
+
+  background: #101419;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  font-family: "Inter", Arial, sans-serif;
+  color: #101419;
+}
+
+/* BOX SIZING */
+
+.voltix-otp-page *,
+.voltix-otp-page *::before,
+.voltix-otp-page *::after {
+  box-sizing: border-box;
+}
+
+/* ==========================================
+   MAIN CONTAINER
+========================================== */
+
+.voltix-otp-container {
+  width: 100%;
+  max-width: 440px;
+
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ==========================================
+   BRAND / LOGO
+========================================== */
+
+.voltix-otp-brand {
+  width: 100%;
+
+  text-align: center;
+
+  margin: 0 0 28px;
+}
+
+.voltix-otp-brand h1 {
+  margin: 0;
+
+  color: #d5ff36;
+
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -1.5px;
+}
+
+.voltix-otp-brand p {
+  margin: 8px 0 0;
+
+  color: #aab0bb;
+
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* ==========================================
+   WHITE OTP CARD
+========================================== */
+
+.voltix-otp-card {
+  width: 100%;
+  max-width: 440px;
+
+  margin: 0 auto;
+
+  background: #ffffff;
+
+  border-radius: 14px;
+
+  padding: 32px 26px;
+
+  text-align: left;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* ==========================================
+   CARD HEADING
+========================================== */
+
+.voltix-otp-card h2 {
+  margin: 0 0 12px;
+
+  color: #101419;
+
+  font-size: 30px;
+  font-weight: 750;
+  line-height: 1.2;
+  letter-spacing: -0.8px;
+
+  text-align: left;
+}
+
+/* ==========================================
+   DESCRIPTION
+========================================== */
+
+.voltix-otp-description {
+  margin: 0 0 22px;
+
+  color: #667085;
+
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.6;
+
+  text-align: left;
+}
+
+/* ==========================================
+   OTP INPUT BOXES
+========================================== */
+
+.voltix-otp-inputs {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+
+  gap: 8px;
+
+  margin-bottom: 18px;
+}
+
+.voltix-otp-inputs input {
+  width: 100%;
+  min-width: 0;
+
+  height: 55px;
+
+  padding: 0;
+
+  border: 1.5px solid #cbd2dc;
+  border-radius: 9px;
+
+  background: #ffffff;
+  color: #101419;
+
+  font-family: inherit;
+  font-size: 23px;
+  font-weight: 600;
+
+  text-align: center;
+
+  outline: none;
+  box-shadow: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.voltix-otp-inputs input:hover {
+  border-color: #9ca3af;
+}
+
+.voltix-otp-inputs input:focus {
+  border-color: #a9d22e;
+
+  box-shadow: 0 0 0 3px rgba(169, 210, 46, 0.15);
+}
+
+/* ==========================================
+   VERIFY BUTTON
+========================================== */
+
+.voltix-otp-verify-button {
+  width: 100%;
+
+  height: 48px;
+
+  padding: 0 12px;
+
+  background: #101419;
+  color: #ffffff;
+
+  border: none;
+  border-radius: 8px;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.voltix-otp-verify-button:hover:not(:disabled) {
+  background: #252b33;
+}
+
+.voltix-otp-verify-button:active:not(:disabled) {
+  transform: scale(0.99);
+}
+
+.voltix-otp-verify-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ==========================================
+   RESEND OTP / TIMER
+========================================== */
+
+.voltix-otp-resend {
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 12px;
+
+  margin-top: 18px;
+  padding-bottom: 12px;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.voltix-otp-resend span {
+  color: #667085;
+
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.voltix-otp-resend button {
+  padding: 0;
+
+  background: transparent;
+  border: none;
+
+  color: #101419;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+
+  text-decoration: underline;
+
+  cursor: pointer;
+}
+
+.voltix-otp-resend button:hover:not(:disabled) {
+  color: #729b00;
+}
+
+.voltix-otp-resend button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ==========================================
+   BACK TO ADMIN LOGIN
+========================================== */
+
+.voltix-otp-back {
+  width: 100%;
+
+  margin-top: 24px;
+
+  text-align: center;
+}
+
+.voltix-otp-back a {
+  color: #aab0bb;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  text-decoration: underline;
+
+  transition: color 0.2s ease;
+}
+
+.voltix-otp-back a:hover {
+  color: #ffffff;
+}
+
+/* ==========================================
+   ERROR MESSAGE
+========================================== */
+
+.voltix-otp-error {
+  width: 100%;
+
+  margin: 0 0 15px;
+
+  color: #dc2626;
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ==========================================
+   RESPONSIVE - TABLET
+========================================== */
+
+@media (max-width: 600px) {
+  .voltix-otp-page {
+    padding: 24px 16px;
+  }
+
+  .voltix-otp-container {
+    max-width: 440px;
+  }
+
+  .voltix-otp-brand h1 {
+    font-size: 36px;
+  }
+
+  .voltix-otp-brand p {
+    font-size: 15px;
+  }
+
+  .voltix-otp-card {
+    padding: 28px 20px;
+    border-radius: 12px;
+  }
+
+  .voltix-otp-card h2 {
+    font-size: 27px;
+  }
+
+  .voltix-otp-description {
+    font-size: 12px;
+  }
+
+  .voltix-otp-inputs {
+    gap: 6px;
+  }
+
+  .voltix-otp-inputs input {
+    height: 50px;
+    font-size: 21px;
+  }
+
+  .voltix-otp-verify-button {
+    height: 48px;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE - SMALL MOBILE
+========================================== */
+
+@media (max-width: 380px) {
+  .voltix-otp-page {
+    padding: 20px 12px;
+  }
+
+  .voltix-otp-card {
+    padding: 24px 14px;
+  }
+
+  .voltix-otp-card h2 {
+    font-size: 25px;
+  }
+
+  .voltix-otp-inputs {
+    gap: 5px;
+  }
+
+  .voltix-otp-inputs input {
+    height: 45px;
+    font-size: 19px;
+    border-radius: 7px;
+  }
+
+  .voltix-otp-resend span,
+  .voltix-otp-resend button {
+    font-size: 11px;
+  }
+}

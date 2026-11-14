@@ -1,0 +1,205 @@
+/* VOLTIX USER REGISTRATION PAGE */
+
+/* Registration Main Area */
+
+.voltix-register-main {
+  padding-top: 40px;
+  padding-bottom: 50px;
+}
+
+/* Registration Card */
+
+.voltix-register-card {
+  max-width: 405px;
+  padding: 28px 25px 25px;
+  border-radius: 13px;
+}
+
+/* Heading */
+
+.voltix-register-card h1 {
+  margin: 0 0 7px;
+
+  color: #141820;
+
+  font-size: 25px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.6px;
+}
+
+/* Subtitle */
+
+.voltix-register-card .voltix-user-login-subtitle {
+  margin-bottom: 17px;
+
+  color: #667085;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* Form Groups */
+
+.voltix-register-card .voltix-user-form-group {
+  margin-bottom: 15px;
+}
+
+.voltix-register-card .voltix-user-form-group label {
+  margin-bottom: 6px;
+
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Input Fields */
+
+.voltix-register-card .voltix-user-form-group input {
+  height: 39px;
+  padding: 0 12px;
+
+  border: 1px solid #cbd2dc;
+  border-radius: 7px;
+
+  background: #ffffff;
+  color: #141820;
+
+  font-size: 12px;
+}
+
+.voltix-register-card .voltix-user-form-group input:focus {
+  border-color: #101419;
+}
+
+/* TERMS AND PRIVACY */
+
+.voltix-register-terms {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+
+  margin: 3px 0 15px;
+
+  color: #141820;
+  font-size: 11px;
+  line-height: 1.5;
+
+  cursor: pointer;
+}
+
+.voltix-register-terms input {
+  width: 14px;
+  height: 14px;
+
+  flex-shrink: 0;
+  margin: 1px 0 0;
+
+  accent-color: #101419;
+  cursor: pointer;
+}
+
+.voltix-register-terms span {
+  flex: 1;
+}
+
+/* REGISTER BUTTON */
+
+.voltix-register-card .voltix-user-login-button {
+  width: 100%;
+  height: 42px;
+
+  margin-top: 0;
+
+  background: #101419;
+  color: #ffffff;
+
+  border: none;
+  border-radius: 6px;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.voltix-register-card .voltix-user-login-button:hover {
+  background: #252b33;
+}
+
+/* GOOGLE REGISTRATION */
+
+.voltix-register-card .voltix-user-divider {
+  margin: 15px 0;
+}
+
+.voltix-register-card .voltix-google-button {
+  height: 42px;
+
+  border: 1px solid #cbd2dc;
+  border-radius: 7px;
+
+  background: #ffffff;
+  color: #141820;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.voltix-register-card .voltix-google-button:hover {
+  background: #f8f9fa;
+}
+
+/* LOGIN LINK */
+
+.voltix-register-card .voltix-user-register-link {
+  margin: 17px 0 0;
+
+  color: #667085;
+  font-size: 12px;
+  text-align: center;
+}
+
+.voltix-register-card .voltix-user-register-link a {
+  color: #141820;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* VALIDATION ERROR */
+
+.voltix-register-error {
+  margin: 0 0 12px;
+
+  color: #dc2626;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 600px) {
+  .voltix-register-main {
+    padding: 25px 15px 40px;
+  }
+
+  .voltix-register-card {
+    max-width: 100%;
+    padding: 25px 20px;
+  }
+
+  .voltix-register-card h1 {
+    font-size: 23px;
+  }
+
+  .voltix-register-card .voltix-user-form-group {
+    margin-bottom: 14px;
+  }
+
+  .voltix-register-card .voltix-user-form-group input {
+    height: 42px;
+  }
+
+  .voltix-register-terms {
+    font-size: 11px;
+  }
+}

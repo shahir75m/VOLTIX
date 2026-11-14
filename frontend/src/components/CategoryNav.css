@@ -1,0 +1,9 @@
+.vx-category-bar.voltix-store-category-nav,
+.vx-category-bar.voltix-user-categories { display:block; width:100%; min-width:0; box-sizing:border-box; padding:0; overflow:hidden; background:#fff; border-bottom:1px solid #e5e7eb; }
+.vx-category-scroll { display:flex; align-items:center; flex-wrap:nowrap; gap:30px; width:100%; max-width:1440px; min-width:0; min-height:48px; margin:0 auto; padding:0 32px; box-sizing:border-box; overflow-x:auto; overflow-y:hidden; scrollbar-width:none; -ms-overflow-style:none; }
+.vx-category-scroll::-webkit-scrollbar { display:none; width:0; height:0; }
+.vx-category-scroll > a { display:inline-flex; flex:0 0 auto; align-items:center; min-height:48px; padding:0; color:#252a32; font-size:13px; font-weight:500; text-decoration:none; white-space:nowrap; }
+.vx-category-scroll > a:hover { color:#6b8500; }
+.vx-category-scroll > a:focus-visible { outline:2px solid #6b8500; outline-offset:-3px; border-radius:4px; }
+.vx-category-scroll:focus-visible { outline:2px solid #c8d89c; outline-offset:-2px; }
+@media(max-width:600px) { .vx-category-scroll { gap:24px; padding:0 20px; } }

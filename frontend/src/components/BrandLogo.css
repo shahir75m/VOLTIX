@@ -1,0 +1,4 @@
+.voltix-brand-logo { display: block; width: auto; max-width: 100%; object-fit: contain; }
+.voltix-brand-logo.sm { height: 30px; }
+.voltix-brand-logo.md { height: 40px; }
+.voltix-brand-logo.lg { height: 64px; margin: 0 auto; }

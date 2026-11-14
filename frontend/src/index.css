@@ -1,0 +1,58 @@
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  overflow-x: clip;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  display: block;
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: #f7f8fa;
+  color: #141820;
+  text-rendering: optimizeLegibility;
+}
+
+#root {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  width: 100%;
+  min-height: 100vh;
+}
+
+button,
+input,
+select,
+textarea { font: inherit; }
+
+button:not(:disabled),
+a { -webkit-tap-highlight-color: transparent; }
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #9dcc00;
+  outline-offset: 2px;
+}
+
+img { max-width: 100%; }

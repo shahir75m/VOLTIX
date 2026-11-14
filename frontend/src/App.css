@@ -1,0 +1,85 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b0f19;
+  color: white;
+}
+
+.admin-login-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.admin-login-form {
+  width: 100%;
+  max-width: 400px;
+  background: #151b2b;
+  padding: 35px;
+  border-radius: 14px;
+}
+
+.admin-login-form h1 {
+  text-align: center;
+  color: #22c55e;
+}
+
+.admin-login-form h2 {
+  text-align: center;
+}
+
+.admin-login-form p {
+  text-align: center;
+  color: #9ca3af;
+  margin-bottom: 30px;
+}
+
+.admin-login-form label {
+  display: block;
+  margin: 15px 0 8px;
+}
+
+.admin-login-form input {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #374151;
+  border-radius: 8px;
+  background: #0b0f19;
+  color: white;
+}
+
+.admin-login-form button {
+  width: 100%;
+  padding: 13px;
+  margin-top: 25px;
+  background: #22c55e;
+  color: #0b0f19;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.admin-login-form button:hover {
+  background: #16a34a;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+#root {
+  display: block;
+  max-width: none;
+  padding: 0;
+}
