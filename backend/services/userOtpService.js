@@ -1,5 +1,5 @@
-const nodemailer = require("nodemailer");
 const crypto = require("node:crypto");
+const { sendEmail } = require("./emailApiService");
 
 // Generate a secure 6-digit OTP
 const generateUserOTP = () => {
@@ -20,22 +20,9 @@ const hashUserOTP = (otp) => {
     .digest("hex");
 };
 
-// Create SMTP transporter
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT),
-  secure: Number(process.env.SMTP_PORT) === 465,
-
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
-
 // Send registration verification OTP
 const sendUserOTP = async (email, otp) => {
-  await transporter.sendMail({
-    from: process.env.SMTP_FROM,
+  await sendEmail({
     to: email,
 
     subject: "VOLTIX - Verify Your Email",
@@ -118,8 +105,7 @@ If you did not create a VOLTIX account, please ignore this email.`,
 
 // Send OTP for changing account email
 const sendEmailChangeOTP = async (email, otp) => {
-  const result = await transporter.sendMail({
-    from: process.env.SMTP_FROM,
+  const result = await sendEmail({
     to: email,
 
     subject: "VOLTIX - Verify Your New Email",
@@ -198,16 +184,8 @@ If you did not request this change, please ignore this email.`,
     `,
   });
 
-  const accepted = (result.accepted || []).map((recipient) =>
-    String(recipient).toLowerCase()
-  );
-
   return {
-    accepted: accepted.includes(email.toLowerCase()),
-    messageId: result.messageId,
-    response: result.response,
-    acceptedCount: accepted.length,
-    rejectedCount: (result.rejected || []).length,
+    id: result.id,
   };
 };
 

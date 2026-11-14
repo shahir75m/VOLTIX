@@ -17,7 +17,10 @@
    `db.orders.updateMany({status:{$in:["Confirmed","Shipped","Out for Delivery","Delivered"]}},{$set:{stockDeducted:true}})`
 6. Test manually: COD order, Razorpay success (test card 4111 1111 1111 1111), close the window -> retry,
    double-click Place order, cancel, return request -> admin approve/reject, stock numbers after each.
-7. Optional: SMTP_* vars for "Send email update" in admin order detail.
+7. **Verification emails** (admin login, registration, password reset, email changes): set
+   `MAILJET_API_KEY`, `MAILJET_SECRET_KEY` and `EMAIL_FROM` in the backend environment. Verify the
+   sender email address in Mailjet first. Render Free blocks outbound SMTP on ports 25, 465 and 587.
+   SMTP_* is only for admin order-status emails on local or paid hosting; it will not work on Render Free.
 8. **Coupons are now created by the admin** (Admin -> Coupons). The old fixed codes (VOLTIX10, GADGET500,
    FESTIVE15) are gone: create the ones you want, e.g. WELCOME10 (10%, min 999, first order only).
 9. **Offers & banners** (Admin -> Offers): needs the same Cloudinary keys the product images already use.

@@ -125,34 +125,29 @@ if (
       });
     }
 
-    if (!delivery.accepted) {
+    if (!delivery?.id) {
       await EmailChangeOTP.deleteOne({
         userId: user._id,
         otpHash,
       });
 
-      console.error("Email change OTP was not accepted by the mail server:", {
-        acceptedCount: delivery.acceptedCount,
-        rejectedCount: delivery.rejectedCount,
-        response: delivery.response,
+      console.error("Email change OTP was not accepted by the email provider:", {
+        response: delivery,
       });
 
       return res.status(503).json({
         success: false,
-        message: "The mail server did not accept the verification email. Please try again.",
+        message: "The email provider did not accept the verification email. Please try again.",
       });
     }
 
-    console.info("Email change OTP accepted by SMTP server:", {
-      messageId: delivery.messageId,
-      acceptedCount: delivery.acceptedCount,
-      rejectedCount: delivery.rejectedCount,
-      response: delivery.response,
+    console.info("Email change OTP accepted by the email provider:", {
+      messageId: delivery.id,
     });
 
     return res.status(200).json({
       success: true,
-      message: "Verification email submitted by the mail server. Delivery may take a few minutes.",
+      message: "Verification email submitted to the email provider. Delivery may take a few minutes.",
       expiresIn: 300,
     });
   } catch (error) {
