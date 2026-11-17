@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import BrandLogo from "../../components/BrandLogo";
 import { API_BASE_URL } from "../../config/api";
@@ -60,7 +60,85 @@ function UserRegister() {
   const [fieldErrors, setFieldErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  const googleButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (!googleClientId) return;
+
+    const initializeGoogle = () => {
+      if (!window.google?.accounts?.id) return;
+
+      window.google.accounts.id.initialize({
+        client_id: googleClientId,
+        callback: async (response) => {
+          setError("");
+          setSuccess("");
+          setLoading(true);
+
+          try {
+            const result = await fetch(`${API_BASE_URL}/api/users/google`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify({ credential: response.credential }),
+            });
+
+            const data = await result.json();
+
+            if (!result.ok || !data.success) {
+              throw new Error(data.message || "Google registration failed");
+            }
+
+            setSuccess("Google login successful!");
+            navigate("/home", { replace: true });
+          } catch (err) {
+            setError(err.message || "Google authentication failed");
+          } finally {
+            setLoading(false);
+          }
+        },
+      });
+
+      if (googleButtonRef.current) {
+        window.google.accounts.id.renderButton(googleButtonRef.current, {
+          theme: "outline",
+          size: "large",
+          text: "continue_with",
+          width: 300,
+        });
+      }
+    };
+
+    const existingScript = document.querySelector(
+      'script[src="https://accounts.google.com/gsi/client"]'
+    );
+
+    if (existingScript) {
+      if (window.google?.accounts?.id) {
+        initializeGoogle();
+      } else {
+        existingScript.addEventListener("load", initializeGoogle);
+      }
+      return () => {
+        existingScript.removeEventListener("load", initializeGoogle);
+      };
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.addEventListener("load", initializeGoogle);
+    document.body.appendChild(script);
+
+    return () => {
+      script.removeEventListener("load", initializeGoogle);
+    };
+  }, [googleClientId, navigate]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -272,10 +350,29 @@ function UserRegister() {
             )}
 
             {error && <p className="voltix-register-error" role="alert">{error}</p>}
+            {success && <p style={{ color: "#15803d", fontSize: "13px", marginBottom: "12px" }} role="status">{success}</p>}
             <button type="submit" className="voltix-user-login-button" disabled={loading}>
               {loading ? "Sending OTP..." : "Create account and send OTP"}
             </button>
+            
           </form>
+
+          {/* GOOGLE LOGIN */}
+
+          <div className="voltix-user-divider">
+            <span>or</span>
+          </div>
+
+          <div
+            ref={googleButtonRef}
+            className="voltix-google-login-container"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "16px",
+              marginBottom: "16px",
+            }}
+          />
 
           <p className="voltix-user-register-link">
             Already have an account? <Link to="/login">Log in</Link>
