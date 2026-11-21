@@ -39,7 +39,8 @@ async function seedDemoProducts() {
   const brand = await Brand.findOne({ nameKey: key("VORTIX") });
 
   // product templates: name, category key (must match catMap key), brand, variantOptions, basePrice, baseMRP, baseStock
-  const productTemplates = [
+  // First 25 products (5 per category)
+  const productTemplatesPart1 = [
     // Mobile phones
     { name: "VORTIX X1 Pro", catKey: "mobiles", brand: "VORTIX", variantOptions: ["Colour", "Storage"], basePrice: 29990, baseMRP: 34990, baseStock: 40 },
     { name: "VORTIX S5", catKey: "mobiles", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 19990, baseMRP: 23990, baseStock: 60 },
@@ -76,6 +77,44 @@ async function seedDemoProducts() {
     { name: "LiteBook Go", catKey: "laptops", brand: "LiteBook", variantOptions: ["RAM", "Storage"], basePrice: 39990, baseMRP: 45990, baseStock: 35 },
   ];
 
+  // Additional 25 products (5 per category) - variants with different specs
+  const productTemplatesPart2 = [
+    // Mobile phones (different price points)
+    { name: "VORTIX X1 Lite", catKey: "mobiles", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 19990, baseMRP: 23990, baseStock: 80 },
+    { name: "VORTIX X2 Max", catKey: "mobiles", brand: "VORTIX", variantOptions: ["Colour", "Storage"], basePrice: 39990, baseMRP: 44990, baseStock: 25 },
+    { name: "VORTIX A5", catKey: "mobiles", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 14990, baseMRP: 17990, baseStock: 100 },
+    { name: "PowerMax P2", catKey: "mobiles", brand: "PowerMax", variantOptions: ["Colour"], basePrice: 12990, baseMRP: 15990, baseStock: 70 },
+    { name: "Connct Y", catKey: "mobiles", brand: "SmartConnect", variantOptions: ["Colour"], basePrice: 9990, baseMRP: 12990, baseStock: 120 },
+
+    // Headphones (different models)
+    { name: "VORTIX Beat 2", catKey: "headphones", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 1999, baseMRP: 2999, baseStock: 60 },
+    { name: "VORTIX SoundMax", catKey: "headphones", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 3999, baseMRP: 4999, baseStock: 40 },
+    { name: "BassPro Deluxe", catKey: "headphones", brand: "BassBox", variantOptions: ["Colour"], basePrice: 2499, baseMRP: 3299, baseStock: 50 },
+    { name: "TruFit TWS", catKey: "headphones", brand: "EchoFit", variantOptions: ["Colour"], basePrice: 699, baseMRP: 899, baseStock: 150 },
+    { name: "HomeTheater 5.1", catKey: "headphones", brand: "StudioSound", variantOptions: ["Colour"], basePrice: 1799, baseMRP: 2299, baseStock: 35 },
+
+    // Power Banks (higher capacity)
+    { name: "VORTIX Power 30000", catKey: "power-banks", brand: "VORTIX", variantOptions: ["Capacity"], basePrice: 2999, baseMRP: 3499, baseStock: 25 },
+    { name: "SolarCharge 15K", catKey: "power-banks", brand: "QuickPower", variantOptions: ["Capacity"], basePrice: 1599, baseMRP: 1999, baseStock: 90 },
+    { name: " turboPower 5K", catKey: "power-banks", brand: "EnergyBoost", variantOptions: ["Capacity"], basePrice: 799, baseMRP: 999, baseStock: 200 },
+    { name: "HeavyDuty 30K", catKey: "power-banks", brand: "ChargeMaster", variantOptions: ["Capacity"], basePrice: 3299, baseMRP: 3999, baseStock: 20 },
+    { name: "Compact 5000", catKey: "power-banks", brand: "PowerMax", variantOptions: ["Capacity"], basePrice: 699, baseMRP: 899, baseStock: 180 },
+
+    // Speakers (different styles)
+    { name: "VORTIX MiniSound", catKey: "speakers", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 1299, baseMRP: 1799, baseStock: 100 },
+    { name: "Wireless Beam", catKey: "speakers", brand: "PartyLoud", variantOptions: ["Colour"], basePrice: 2499, baseMRP: 2999, baseStock: 45 },
+    { name: "StudioMonitor 2", catKey: "speakers", brand: "BassBox", variantOptions: ["Colour"], basePrice: 1999, baseMRP: 2499, baseStock: 60 },
+    { name: "PodcastMic Set", catKey: "speakers", brand: "ClearTone", variantOptions: ["Colour"], basePrice: 899, baseMRP: 1299, baseStock: 120 },
+    { name: "BassJack 10", catKey: "speakers", brand: "PartyLoud", variantOptions: ["Colour"], basePrice: 3499, baseMRP: 3999, baseStock: 30 },
+
+    // Laptops (different configs)
+    { name: "VORTIX UltraLight", catKey: "laptops", brand: "VORTIX", variantOptions: ["RAM", "Storage"], basePrice: 45990, baseMRP: 52990, baseStock: 30 },
+    { name: "VORTIX WorkStation", catKey: "laptops", brand: "VORTIX", variantOptions: ["RAM", "Storage"], basePrice: 79990, baseMRP: 89990, baseStock: 12 },
+    { name: "NoteBook Go", catKey: "laptops", brand: "SpeedNote", variantOptions: ["RAM", "Storage"], basePrice: 35990, baseMRP: 42990, baseStock: 45 },
+    { name: "CreatorPro 16", catKey: "laptops", brand: "WorkMate", variantOptions: ["RAM", "Storage"], basePrice: 65990, baseMRP: 74990, baseStock: 18 },
+    { name: "EduBook SE", catKey: "laptops", brand: "LiteBook", variantOptions: ["RAM", "Storage"], basePrice: 29990, baseMRP: 35990, baseStock: 55 },
+  ];
+
   const variantAttrs = {
     Colour: ["Midnight Black", "Electric Lime", "Arctic White", "Sunset Red"],
     Storage: ["128 GB", "256 GB", "512 GB"],
@@ -86,17 +125,20 @@ async function seedDemoProducts() {
   // map catKey to display tag
   const catTags = {
     mobiles: "mobiles", headphones: "headphones", "power-banks": "power-banks",
-    speakers: "speakers", laptops: "laptops"
+    speakers: "speakers", laptops: "laptops",
+    // additional catKeys from part 2
+    mobiles2: "mobiles", headphones2: "headphones", power-banks2: "power-banks", speakers2: "speakers", laptops2: "laptops"
   };
 
+  const productTemplates = [...productTemplatesPart1, ...productTemplatesPart2];
   let created = 0;
   for (let i = 0; i < productTemplates.length; i++) {
     const t = productTemplates[i];
     const catKey = t.catKey;
     const attrList = variantAttrs[t.variantOptions?.[0] || "Colour"] || ["Default"];
 
-    // use pre-mapped tag
-    const tag = catTags[catKey] || "electronics";
+    // use pre-mapped tag (support both part1 catKey and part2 catKey variants)
+    const tag = catTags[catKey] || catTags[catKey + "2"] || "electronics";
 
     const variants = [];
     const numVariants = Math.min(3, attrList.length);
@@ -118,7 +160,7 @@ async function seedDemoProducts() {
       slug: t.name.toLowerCase().replace(/\s+/g, "-") + "-" + i,
       shortDescription: `${t.name} - premium ${tag} experience`,
       description: `VORTIX quality ${tag}. Premium features and reliable performance.`,
-      category: catMap[catKey] || null,
+      category: catMap[catKey] || catMap[catKey + "2"] || null,
       brand: brand._id,
       gstPercent: 18,
       price: t.basePrice,
@@ -134,7 +176,7 @@ async function seedDemoProducts() {
       warrantyType: "Manufacturer warranty",
       weightGrams: 150 + (i * 10),
       codAvailable: true,
-      isPublished: true,
+      isPublished: false,
       isBlocked: false,
       isFeatured: i % 5 === 0,
       newArrival: i % 3 === 0,
