@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { API_BASE_URL } from "../../config/api";
+import PasswordInput from "../../components/PasswordInput";
+import { evaluatePassword } from "../../utils/passwordRules";
 import "./UserProfile.css";
 import Icon from "../../components/Icon";
 function UserProfile() {
@@ -73,13 +75,10 @@ function UserProfile() {
     if (field === "newPassword") {
       if (!newPassword) return "New password is required.";
       if (!newPassword.trim()) return "Password cannot contain only spaces.";
-      if (newPassword.length < 8 || newPassword.length > 128) {
-        return "New password must contain 8–128 characters.";
-      }
       if (newPassword === currentPassword) {
         return "New password must be different from current password.";
       }
-      return "";
+      return evaluatePassword(newPassword, { name: profile.name, email: profile.email, phone: profile.phone }).message;
     }
     if (!confirmPassword) return "Please confirm your new password.";
     if (confirmPassword !== newPassword) return "New passwords do not match.";
@@ -1312,8 +1311,7 @@ const handleRemoveProfileImage = async () => {
         return (
           <label key={field}>
             {label}
-            <input
-              type="password"
+            <PasswordInput
               value={passwordData[field]}
               onChange={(event) => changePasswordInput(field, event.target.value)}
               onBlur={() => setPasswordTouched((previous) => ({ ...previous, [field]: true }))}

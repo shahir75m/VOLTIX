@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate, useSearchParams } from "react-router-do
 import { ShopContext } from "../context/ShopContext";
 import { apiFetch, apiJson } from "../utils/api";
 import { API_BASE_URL } from "../config/api";
+import { clearUserSession, primeUserSession } from "../utils/userSession";
 import voltixLogo from "../assets/voltix-logo.svg";
 import "../pages/user/UserHome.css";
 import "./StoreShop.css";
@@ -84,12 +85,16 @@ export default function StoreLayout({ children, hideFooter = false }) {
         });
         if (response.status === 403) {
           const data = await response.json().catch(() => ({}));
+          clearUserSession();
           navigate("/login", { replace: true, state: { message: data.message || "Your account has been blocked." } });
           return;
         }
         if (response.ok) {
           const data = await response.json();
-          if (data.success) setUser(data.user);
+          if (data.success) {
+            setUser(data.user);
+            primeUserSession(data.user);
+          }
         }
       } catch (error) {
         if (error.name !== "AbortError") console.error("User session check failed:", error);
@@ -132,8 +137,8 @@ export default function StoreLayout({ children, hideFooter = false }) {
 
   const requireLogin = useCallback(() => {
     showToast("Please log in to continue", "error");
-    navigate("/login");
-  }, [navigate, showToast]);
+    navigate("/login", { state: { from: `${location.pathname}${location.search}` } });
+  }, [navigate, showToast, location.pathname, location.search]);
 
   const toggleWishlist = useCallback(
     async (productId) => {
@@ -166,6 +171,7 @@ export default function StoreLayout({ children, hideFooter = false }) {
       // protected pages redirect to /login on their own and win over the redirect to home.)
       countCache.cart = 0;
       countCache.wishlist = [];
+      clearUserSession();
       navigate("/", { replace: true });
       setUser(null);
       setCartCount(0);

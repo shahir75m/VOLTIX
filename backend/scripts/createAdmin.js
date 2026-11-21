@@ -6,6 +6,14 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const connectDB = require("../config/db");
 
+// Creates the first admin from ADMIN_EMAIL / ADMIN_PASSWORD.
+// If the account already exists nothing is changed — the .env password is only used on
+// creation, so an old account can keep a different password than `.env` says.
+//
+//   node scripts/createAdmin.js                    # create only
+//   node scripts/createAdmin.js --reset-password   # make .env credentials valid again
+const RESET = process.argv.includes("--reset-password");
+
 const createAdmin = async () => {
   try {
     await connectDB();
@@ -19,14 +27,26 @@ const createAdmin = async () => {
       );
     }
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email }).select("+password");
 
-    if (existingUser) {
-      console.log("An account with this email already exists");
+    if (existingUser && !RESET) {
+      console.log(`An account with ${email} already exists (role: ${existingUser.role}).`);
+      console.log("Its password was NOT changed: ADMIN_PASSWORD is only used when the account is created.");
+      console.log("To make the current ADMIN_PASSWORD work, run:  node scripts/createAdmin.js --reset-password");
       return;
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
+
+    if (existingUser) {
+      existingUser.password = hashedPassword;
+      existingUser.role = "admin";
+      existingUser.isVerified = true;
+      existingUser.isBlocked = false;
+      await existingUser.save();
+      console.log(`Password for ${email} reset from .env and the account is an active admin.`);
+      return;
+    }
 
     await User.create({
       name: "VORTIX Admin",
@@ -34,12 +54,13 @@ const createAdmin = async () => {
       password: hashedPassword,
       role: "admin",
       isBlocked: false,
-      isVerified: true
+      isVerified: true,
     });
 
     console.log("Admin Account Created Successfully");
   } catch (error) {
     console.error("Admin Creation Failed:", error.message);
+    process.exitCode = 1;
   } finally {
     await mongoose.disconnect();
   }

@@ -130,7 +130,7 @@ async function generateOrderNumber() {
   const counter = await Counter.findOneAndUpdate(
     { _id: "order" },
     { $inc: { seq: 1 } },
-    { new: true, upsert: true }
+    { returnDocument: "after", upsert: true }
   );
   // first order = 1001. (Counter starts at 1.)
   return String(1000 + counter.seq);

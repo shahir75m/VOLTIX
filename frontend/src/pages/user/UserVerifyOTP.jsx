@@ -283,10 +283,10 @@ function UserVerifyOTP() {
           </div>
 
           <nav className="voltix-user-header-links">
-            <a href="#offers">Offers</a>
-            <a href="#wishlist">Wishlist</a>
-            <a href="#cart">Cart · 2</a>
-            <a href="#account">My account</a>
+            <Link to="/products">Shop</Link>
+            <Link to="/offers">Offers</Link>
+            <Link to="/wishlist">Wishlist</Link>
+            <Link to="/cart">Cart</Link>
             <Link to="/login">Login</Link>
           </nav>
         </div>
@@ -304,6 +304,11 @@ function UserVerifyOTP() {
             We sent a 6-digit one-time password to{" "}
             {email || "your email"}.
             It expires in 5 minutes.
+          </p>
+
+          <p className="voltix-otp-description" style={{ fontSize: "12px" }}>
+            Didn&apos;t get it? Check the spam / junk folder first, then use “Resend OTP”.
+            A code sent to a made-up address can never arrive, so use an email you can open.
           </p>
 
           <form onSubmit={handleVerify}>
@@ -398,16 +403,16 @@ function UserVerifyOTP() {
 
           <div className="voltix-footer-column">
             <h3>Shop</h3>
-            <a href="#products">All products</a>
-            <a href="#wishlist">Wishlist</a>
-            <a href="#cart">Cart</a>
+            <Link to="/products">All products</Link>
+            <Link to="/wishlist">Wishlist</Link>
+            <Link to="/cart">Cart</Link>
           </div>
 
           <div className="voltix-footer-column">
             <h3>Account</h3>
             <Link to="/login">Login</Link>
             <Link to="/register">Create account</Link>
-            <a href="#orders">My orders</a>
+            <Link to="/orders">My orders</Link>
           </div>
 
           <div className="voltix-footer-column">

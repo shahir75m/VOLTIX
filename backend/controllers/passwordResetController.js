@@ -13,6 +13,8 @@ const {
   hashUserOTP,
 } = require("../services/userOtpService");
 
+const { checkPassword } = require("../utils/passwordPolicy");
+
 // ==================================
 // CONSTANTS
 // ==================================
@@ -179,7 +181,7 @@ const forgotPassword = async (req, res) => {
       },
       {
         upsert: true,
-        new: true,
+        returnDocument: "after",
         runValidators: true,
       }
     );
@@ -366,24 +368,14 @@ const resetPassword = async (req, res) => {
       });
     }
 
-    // Validate password length
-    if (
-      newPassword.length < 8 ||
-      newPassword.length > 128
-    ) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Password must contain between 8 and 128 characters.",
-      });
-    }
+    // Validate password strength
+    const passwordCheck = checkPassword(newPassword);
 
-    // Reject spaces-only passwords
-    if (!newPassword.trim()) {
+    if (!passwordCheck.valid) {
       return res.status(400).json({
         success: false,
-        message:
-          "Password cannot contain only spaces.",
+        message: passwordCheck.message,
+        errors: { newPassword: passwordCheck.message },
       });
     }
 
@@ -485,7 +477,7 @@ const resetPassword = async (req, res) => {
         },
       },
       {
-        new: true,
+        returnDocument: "after",
       }
     );
 

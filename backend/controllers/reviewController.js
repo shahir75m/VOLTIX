@@ -243,7 +243,7 @@ const adminListReviews = async (req, res) => {
 const adminSetVisibility = async (req, res) => {
   try {
     if (!isId(req.params.id)) return fail(res, 404, "Review not found");
-    const review = await Review.findOneAndUpdate({ _id: req.params.id, isDeleted: { $ne: true } }, { $set: { isHidden: req.body?.isHidden === true } }, { new: true });
+    const review = await Review.findOneAndUpdate({ _id: req.params.id, isDeleted: { $ne: true } }, { $set: { isHidden: req.body?.isHidden === true } }, { returnDocument: "after" });
     if (!review) return fail(res, 404, "Review not found");
     await refreshProductRating(review.product);
     return res.status(200).json({ success: true, message: review.isHidden ? "Review hidden" : "Review is visible again", review });
@@ -259,7 +259,7 @@ const adminDeleteReview = async (req, res) => {
     const review = await Review.findOneAndUpdate(
       { _id: req.params.id, isDeleted: { $ne: true } },
       { $set: { isDeleted: true, deletedAt: new Date() } },
-      { new: true }
+      { returnDocument: "after" }
     );
     if (!review) return fail(res, 404, "Review not found");
     await refreshProductRating(review.product);
@@ -276,7 +276,7 @@ const adminRestoreReview = async (req, res) => {
     const review = await Review.findOneAndUpdate(
       { _id: req.params.id, isDeleted: true },
       { $set: { isDeleted: false, deletedAt: null } },
-      { new: true }
+      { returnDocument: "after" }
     );
     if (!review) return fail(res, 404, "Deleted review not found");
     await refreshProductRating(review.product);

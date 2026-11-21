@@ -1,14 +1,20 @@
-import { useEffect, useRef, useState } from "react";import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import BrandLogo from "../../components/BrandLogo";
+import PasswordInput from "../../components/PasswordInput";
 import { API_BASE_URL } from "../../config/api";
+import { validateEmail } from "../../utils/emailRules";
+import { primeUserSession } from "../../utils/userSession";
 import "./UserLogin.css";
 
 function UserLogin() {
   const navigate = useNavigate();
   const location = useLocation();
+  const from = useRef(location.state?.from || "/");
   const [toastMessage, setToastMessage] = useState(location.state?.message || "");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -17,7 +23,8 @@ useEffect(() => {
   if (location.state?.message) {
     navigate(location.pathname, {
       replace: true,
-      state: null,
+      // Keep `from` so a successful login can still return to the page that asked for it.
+      state: location.state?.from ? { from: location.state.from } : null,
     });
   }
 }, [location.pathname, location.state, navigate]);
@@ -52,18 +59,17 @@ useEffect(() => {
       setError("Please enter your email and password.");
       return;
     }
-    
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-if (!emailRegex.test(cleanEmail)) {
-  setError("Please enter a valid email address.");
-  return;
-}
+    const emailCheck = validateEmail(cleanEmail);
+    if (!emailCheck.valid) {
+      setError(emailCheck.message);
+      return;
+    }
 
-if (!password.trim()) {
-  setError("Password cannot contain only spaces.");
-  return;
-}
+    if (!password.trim()) {
+      setError("Password cannot contain only spaces.");
+      return;
+    }
 
     setLoading(true);
 
@@ -94,11 +100,13 @@ if (!password.trim()) {
       setSuccess("Login successful! Redirecting...");
 
       setPassword("");
+      primeUserSession(data.user);
 
-      // Navigate after successful login
+      // Navigate after successful login. `from` is set when a protected page sent the
+      // customer here, so they land where they wanted to go; otherwise the home page.
       setTimeout(() => {
-        navigate("/home", { replace: true });
-      }, 1000);
+        navigate(from.current, { replace: true });
+      }, 700);
 
     } catch (err) {
       setError(
@@ -156,8 +164,9 @@ useEffect(() => {
           }
 
           setSuccess("Google login successful!");
+          primeUserSession(data.user);
 
-          navigate("/home", { replace: true });
+          navigate(from.current, { replace: true });
         } catch (error) {
           setError(
             error.message || "Google authentication failed"
@@ -297,16 +306,34 @@ useEffect(() => {
             <input
               type="search"
               placeholder="Search phones, earbuds, laptops..."
+              aria-label="Search products"
+              value={search}
+              maxLength={100}
+              onChange={(event) => setSearch(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key !== "Enter") return;
+                event.preventDefault();
+                const term = search.trim();
+                navigate(term ? `/products?search=${encodeURIComponent(term)}` : "/products");
+              }}
             />
-            <button type="button">Search</button>
+            <button
+              type="button"
+              onClick={() => {
+                const term = search.trim();
+                navigate(term ? `/products?search=${encodeURIComponent(term)}` : "/products");
+              }}
+            >
+              Search
+            </button>
           </div>
 
           <nav className="voltix-user-header-links">
-            <a href="#offers">Offers</a>
-            <a href="#wishlist">Wishlist</a>
-            <a href="#cart">Cart</a>
-            <a href="#account">My account</a>
-            <Link to="/login">Login</Link>
+            <Link to="/products">Shop</Link>
+            <Link to="/offers">Offers</Link>
+            <Link to="/wishlist">Wishlist</Link>
+            <Link to="/cart">Cart</Link>
+            <Link to="/register">Register</Link>
           </nav>
 
         </div>
@@ -353,9 +380,8 @@ useEffect(() => {
                 </Link>
               </div>
 
-              <input
+              <PasswordInput
                 id="user-password"
-                type="password"
                 placeholder="Your password"
                 value={password}
                 maxLength={128}
@@ -449,16 +475,16 @@ useEffect(() => {
 
           <div className="voltix-footer-column">
             <h3>Shop</h3>
-            <a href="#products">All products</a>
-            <a href="#wishlist">Wishlist</a>
-            <a href="#cart">Cart</a>
+            <Link to="/products">All products</Link>
+            <Link to="/wishlist">Wishlist</Link>
+            <Link to="/cart">Cart</Link>
           </div>
 
           <div className="voltix-footer-column">
             <h3>Account</h3>
             <Link to="/login">Login</Link>
             <Link to="/register">Create account</Link>
-            <a href="#orders">My orders</a>
+            <Link to="/orders">My orders</Link>
           </div>
 
           <div className="voltix-footer-column">

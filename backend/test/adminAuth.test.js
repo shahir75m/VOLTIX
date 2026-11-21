@@ -143,7 +143,7 @@ test("admin password change stores a password hash and requires the emailed OTP"
       user: { _id: admin._id },
       body: {
         currentPassword: "current-password",
-        newPassword: "new-password-123",
+        newPassword: "New-Password-123",
       },
     },
     requestRes
@@ -152,8 +152,8 @@ test("admin password change stores a password hash and requires the emailed OTP"
   assert.equal(requestRes.statusCode, 200);
   assert.equal(requestRes.body.success, true);
   assert.match(requestRes.body.challenge, /^[a-f0-9]{64}$/);
-  assert.equal(storedRecord.newPasswordHash, "hashed:new-password-123");
-  assert.notEqual(storedRecord.newPasswordHash, "new-password-123");
+  assert.equal(storedRecord.newPasswordHash, "hashed:New-Password-123");
+  assert.notEqual(storedRecord.newPasswordHash, "New-Password-123");
   assert.match(sentOtp, /^\d{6}$/);
 
   const wrongOtpRes = makeResponse();
@@ -185,7 +185,7 @@ test("admin password change stores a password hash and requires the emailed OTP"
 
   assert.equal(verifyRes.statusCode, 200);
   assert.equal(verifyRes.body.success, true);
-  assert.equal(passwordUpdate.update.$set.password, "hashed:new-password-123");
+  assert.equal(passwordUpdate.update.$set.password, "hashed:New-Password-123");
   assert.equal(storedRecord, null);
 });
 
@@ -204,7 +204,7 @@ test("admin password change rejects an incorrect current password before sending
       user: { _id: admin._id },
       body: {
         currentPassword: "incorrect-password",
-        newPassword: "new-password-123",
+        newPassword: "New-Password-123",
       },
     },
     res

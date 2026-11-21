@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import AdminPagePending from "../../components/AdminPagePending";
 import AdminSidebar from "../../components/AdminSidebar";
+import PasswordInput from "../../components/PasswordInput";
 import useAdminAuth from "../../hooks/useAdminAuth";
 import { apiJson } from "../../utils/api";
 import "./AdminDashboard.css";
@@ -244,9 +245,8 @@ export default function AdminSecurity() {
             <form className="admin-security-form" onSubmit={requestCode}>
               <label className="admin-security-field" htmlFor="current-admin-password">
                 <span>Current password</span>
-                <input
+                <PasswordInput
                   id="current-admin-password"
-                  type="password"
                   autoComplete="current-password"
                   maxLength={128}
                   value={currentPassword}
@@ -256,25 +256,21 @@ export default function AdminSecurity() {
               </label>
               <label className="admin-security-field" htmlFor="new-admin-password">
                 <span>New password</span>
-                <input
+                <PasswordInput
                   id="new-admin-password"
-                  type="password"
                   autoComplete="new-password"
-                  minLength={8}
                   maxLength={128}
                   value={newPassword}
                   onChange={(event) => setNewPassword(event.target.value)}
                   required
                 />
-                <small>Use 8–128 characters.</small>
+                <small>At least 10 characters with uppercase, lowercase, a number and a symbol.</small>
               </label>
               <label className="admin-security-field" htmlFor="confirm-admin-password">
                 <span>Confirm new password</span>
-                <input
+                <PasswordInput
                   id="confirm-admin-password"
-                  type="password"
                   autoComplete="new-password"
-                  minLength={8}
                   maxLength={128}
                   value={confirmPassword}
                   onChange={(event) => setConfirmPassword(event.target.value)}

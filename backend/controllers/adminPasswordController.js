@@ -7,6 +7,7 @@ const {
   hashOTP,
   sendAdminPasswordChangeOTP,
 } = require("../services/adminOtpService");
+const { checkPassword } = require("../utils/passwordPolicy");
 
 const OTP_EXPIRY = 5 * 60 * 1000;
 const RESEND_COOLDOWN = 60 * 1000;
@@ -29,13 +30,21 @@ const requestAdminPasswordChangeOTP = async (req, res) => {
       typeof currentPassword !== "string" ||
       currentPassword.length < 1 ||
       currentPassword.length > 128 ||
-      typeof newPassword !== "string" ||
-      newPassword.length < 8 ||
-      newPassword.length > 128
+      typeof newPassword !== "string"
     ) {
       return res.status(400).json({
         success: false,
-        message: "Current password and a new 8–128 character password are required",
+        message: "Current password and a new password are required",
+      });
+    }
+
+    const passwordCheck = checkPassword(newPassword);
+
+    if (!passwordCheck.valid) {
+      return res.status(400).json({
+        success: false,
+        message: passwordCheck.message,
+        errors: { newPassword: passwordCheck.message },
       });
     }
 

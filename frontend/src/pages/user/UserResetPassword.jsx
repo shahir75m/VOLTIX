@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import BrandLogo from "../../components/BrandLogo";
+import PasswordInput from "../../components/PasswordInput";
+import PasswordChecklist from "../../components/PasswordChecklist";
 import { API_BASE_URL } from "../../config/api";
+import { evaluatePassword } from "../../utils/passwordRules";
 import "./UserLogin.css";
 
 function UserResetPassword() {
@@ -75,15 +78,7 @@ function UserResetPassword() {
       return "New password is required.";
     }
 
-    if (value.length < 8 || value.length > 128) {
-      return "Password must contain 8–128 characters.";
-    }
-
-    if (!value.trim()) {
-      return "Password cannot contain only spaces.";
-    }
-
-    return "";
+    return evaluatePassword(value, { email: resetData?.email || "" }).message;
   };
 
   const validateConfirmPassword = (value) => {
@@ -492,11 +487,10 @@ function UserResetPassword() {
                   New password
                 </label>
 
-                <input
+                <PasswordInput
                   id="new-password"
-                  type="password"
                   autoComplete="new-password"
-                  placeholder="Minimum 8 characters"
+                  placeholder="Create a strong password"
                   value={newPassword}
                   maxLength={128}
                   onChange={(event) => {
@@ -518,7 +512,7 @@ function UserResetPassword() {
                   aria-describedby={
                     passwordError
                       ? "new-password-error"
-                      : undefined
+                      : "new-password-rules"
                   }
                   style={{
                     borderColor: passwordError
@@ -540,6 +534,12 @@ function UserResetPassword() {
                     {passwordError}
                   </p>
                 )}
+
+                <PasswordChecklist
+                  id="new-password-rules"
+                  password={newPassword}
+                  evaluation={evaluatePassword(newPassword, { email: resetData?.email || "" })}
+                />
               </div>
 
               {/* CONFIRM PASSWORD */}
@@ -548,9 +548,8 @@ function UserResetPassword() {
                   Confirm new password
                 </label>
 
-                <input
+                <PasswordInput
                   id="confirm-password"
-                  type="password"
                   autoComplete="new-password"
                   placeholder="Confirm new password"
                   value={confirmPassword}

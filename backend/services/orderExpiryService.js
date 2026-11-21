@@ -52,7 +52,7 @@ async function expireStaleOrders({ olderThanMs = minutesFromEnv() * 60000, now =
           $set: { status: "Cancelled", cancelReason: reason, cancelledAt: now },
           $push: { statusHistory: { status: "Cancelled", by: "system", note: reason } },
         },
-        { new: true }
+        { returnDocument: "after" }
       );
       if (!claimed) {
         summary.skipped += 1;

@@ -177,7 +177,7 @@ module.exports = function makeTaxonomyController({ Model, productField, label, f
       const doc = await Model.findOneAndUpdate(
         { _id: id, isDeleted: false },
         { $set: { isDeleted: true, deletedAt: new Date() } },
-        { new: true }
+        { returnDocument: "after" }
       );
       if (!doc) return res.status(404).json({ success: false, message: `${label} not found` });
 
@@ -199,7 +199,7 @@ module.exports = function makeTaxonomyController({ Model, productField, label, f
       const doc = await Model.findOneAndUpdate(
         { _id: id, isDeleted: true },
         { $set: { isDeleted: false, deletedAt: null } },
-        { new: true }
+        { returnDocument: "after" }
       );
       if (!doc) return res.status(404).json({ success: false, message: `Deleted ${lower} not found` });
 

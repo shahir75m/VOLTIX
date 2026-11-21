@@ -44,6 +44,7 @@ const UserReturnRequest = lazy(() => import("./pages/user/UserReturnRequest"));
 import AccountLayout from "./components/AccountLayout";
 import ErrorBoundary from "./components/ErrorBoundary";
 import PageLoader from "./components/PageLoader";
+import { GuestOnly, GuestOnlyAdmin, RequireUser } from "./components/RouteGuards";
 const UserOffers = lazy(() => import("./pages/user/UserOffers"));
 const NotFound = lazy(() => import("./pages/user/NotFound"));
 
@@ -57,30 +58,30 @@ function App() {
         <Route path="/" element={<UserHome />} />
         <Route path="/home" element={<Navigate to="/" replace />} />
 
-        {/* CUSTOMER AUTHENTICATION */}
-        <Route path="/login" element={<UserLogin />} />
-        <Route path="/register" element={<UserRegister />} />
-        <Route path="/verify-otp" element={<UserVerifyOTP />} />
-        <Route path="/forgot-password" element={<UserForgotPassword />} />
-        <Route path="/verify-reset-otp" element={<UserResetPassword />} />
+        {/* CUSTOMER AUTHENTICATION — guests only, a signed-in customer is sent home */}
+        <Route path="/login" element={<GuestOnly><UserLogin /></GuestOnly>} />
+        <Route path="/register" element={<GuestOnly><UserRegister /></GuestOnly>} />
+        <Route path="/verify-otp" element={<GuestOnly><UserVerifyOTP /></GuestOnly>} />
+        <Route path="/forgot-password" element={<GuestOnly><UserForgotPassword /></GuestOnly>} />
+        <Route path="/verify-reset-otp" element={<GuestOnly><UserResetPassword /></GuestOnly>} />
 
         {/* SHOP: PRODUCTS, CART, WISHLIST, OFFERS, CHECKOUT */}
         <Route path="/products" element={<UserProducts />} />
         <Route path="/products/:id" element={<UserProductDetail />} />
         <Route path="/offers" element={<UserOffers />} />
-        <Route path="/cart" element={<UserCart />} />
-        <Route path="/checkout" element={<UserCheckout />} />
-        <Route path="/order/success/:id" element={<UserOrderSuccess />} />
-        <Route path="/order/failed/:id" element={<UserOrderFailure />} />
+        <Route path="/cart" element={<RequireUser><UserCart /></RequireUser>} />
+        <Route path="/checkout" element={<RequireUser><UserCheckout /></RequireUser>} />
+        <Route path="/order/success/:id" element={<RequireUser><UserOrderSuccess /></RequireUser>} />
+        <Route path="/order/failed/:id" element={<RequireUser><UserOrderFailure /></RequireUser>} />
 
         {/* CUSTOMER ORDERS & RETURNS */}
-        <Route path="/orders/:id" element={<UserOrderDetail />} />
-        <Route path="/orders/:id/return" element={<UserReturnRequest />} />
+        <Route path="/orders/:id" element={<RequireUser><UserOrderDetail /></RequireUser>} />
+        <Route path="/orders/:id/return" element={<RequireUser><UserReturnRequest /></RequireUser>} />
 
         {/* CUSTOMER PROFILE */}
-        <Route path="/profile/edit" element={<UserProfileEdit />} />
+        <Route path="/profile/edit" element={<RequireUser><UserProfileEdit /></RequireUser>} />
         {/* MY ACCOUNT: one shared layout, so the side menu never jumps between these pages */}
-        <Route element={<AccountLayout />}>
+        <Route element={<RequireUser><AccountLayout /></RequireUser>}>
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/orders" element={<UserOrders />} />
           <Route path="/wishlist" element={<UserWishlist />} />
@@ -88,7 +89,7 @@ function App() {
         </Route>
 
         {/* ADMIN AUTHENTICATION */}
-        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/login" element={<GuestOnlyAdmin><AdminLogin /></GuestOnlyAdmin>} />
         <Route path="/admin/verify-otp" element={<Navigate to="/admin/login" replace />} />
 
         {/* ADMIN MANAGEMENT */}

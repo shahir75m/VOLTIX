@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
+const { checkPassword } = require("../utils/passwordPolicy");
 
 // CHANGE LOGGED-IN USER PASSWORD
 const changePassword = async (req, res) => {
@@ -10,13 +11,21 @@ const changePassword = async (req, res) => {
     if (
       typeof currentPassword !== "string" ||
       !currentPassword ||
-      typeof newPassword !== "string" ||
-      newPassword.length < 8 ||
-      newPassword.length > 128
+      typeof newPassword !== "string"
     ) {
       return res.status(400).json({
         success: false,
-        message: "Password must contain 8–128 characters",
+        message: "Current password and a new password are required.",
+      });
+    }
+
+    const passwordCheck = checkPassword(newPassword);
+
+    if (!passwordCheck.valid) {
+      return res.status(400).json({
+        success: false,
+        message: passwordCheck.message,
+        errors: { newPassword: passwordCheck.message },
       });
     }
 

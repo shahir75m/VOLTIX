@@ -154,7 +154,7 @@ const updateUserBlockStatus = async (req, res) => {
         },
       },
       {
-        new: true,
+        returnDocument: "after",
         runValidators: true,
       }
     ).select("name email isBlocked");

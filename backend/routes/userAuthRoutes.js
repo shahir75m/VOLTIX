@@ -59,7 +59,8 @@ const router = express.Router();
 // Registration Rate Limiter
 const registrationLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  limit: 5,
+  // 5 was easy to hit while testing typo'd email addresses; 10 still blocks abuse.
+  limit: 10,
   standardHeaders: "draft-7",
   legacyHeaders: false,
   message: {

@@ -10,6 +10,9 @@ const {
   sendUserOTP,
 } = require("../services/userOtpService");
 
+const { validateEmail } = require("../utils/emailPolicy");
+const { checkPassword } = require("../utils/passwordPolicy");
+
 const OTP_EXPIRY = 5 * 60 * 1000;
 const RESEND_COOLDOWN = 60 * 1000;
 const MAX_OTP_ATTEMPTS = 5;
@@ -53,9 +56,11 @@ const registerUser = async (req, res) => {
 
     // 3. Validate full name
     if (cleanName.length < 2 || cleanName.length > 50) {
+      const message = "Full name must contain between 2 and 50 characters.";
       return res.status(400).json({
         success: false,
-        message: "Full name must contain between 2 and 50 characters.",
+        message,
+        errors: { name: message },
       });
     }
 
@@ -64,24 +69,23 @@ const registerUser = async (req, res) => {
       /^[\p{L}\p{M}]+(?:[ .'-][\p{L}\p{M}]+)*$/u;
 
     if (!nameRegex.test(cleanName)) {
+      const message =
+        "Full name can contain only letters and valid name separators.";
       return res.status(400).json({
         success: false,
-        message:
-          "Full name can contain only letters and valid name separators.",
+        message,
+        errors: { name: message },
       });
     }
 
-    // 4. Validate email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // 4. Validate email (format + disposable domains + common typos)
+    const emailCheck = validateEmail(cleanEmail);
 
-    if (
-      !cleanEmail ||
-      cleanEmail.length > 254 ||
-      !emailRegex.test(cleanEmail)
-    ) {
+    if (!emailCheck.valid) {
       return res.status(400).json({
         success: false,
-        message: "Please enter a valid email address.",
+        message: emailCheck.message,
+        errors: { email: emailCheck.message },
       });
     }
 
@@ -89,37 +93,40 @@ const registerUser = async (req, res) => {
     const phoneRegex = /^[6-9]\d{9}$/;
 
     if (!phoneRegex.test(cleanPhone)) {
+      const message = "Enter a valid 10-digit Indian mobile number.";
       return res.status(400).json({
         success: false,
-        message: "Enter a valid 10-digit Indian mobile number.",
+        message,
+        errors: { phone: message },
       });
     }
 
-    // 6. Validate password length
-    if (password.length < 8 || password.length > 128) {
+    // 6. Validate password strength (mirrors the checklist in the browser)
+    const passwordCheck = checkPassword(password, {
+      name: cleanName,
+      email: cleanEmail,
+      phone: cleanPhone,
+    });
+
+    if (!passwordCheck.valid) {
       return res.status(400).json({
         success: false,
-        message: "Password must contain 8 to 128 characters.",
+        message: passwordCheck.message,
+        errors: { password: passwordCheck.message },
       });
     }
 
-    // 7. Reject passwords containing only spaces
-    if (!password.trim()) {
-      return res.status(400).json({
-        success: false,
-        message: "Password cannot contain only spaces.",
-      });
-    }
-
-    // 8. Check whether the email already exists
+    // 7. Check whether the email already exists
     const existingUser = await User.findOne({
       email: cleanEmail,
     });
 
     if (existingUser) {
+      const message = "An account with this email already exists. Please log in instead.";
       return res.status(409).json({
         success: false,
-        message: "An account with this email already exists.",
+        message,
+        errors: { email: message },
       });
     }
 
@@ -168,14 +175,17 @@ const registerUser = async (req, res) => {
         challengeHash,
       });
 
+      console.error("User OTP email error:", emailError.message);
       console.error(
-        "User OTP email error:",
-        emailError.message
+        "OTP email could not be delivered. Check EMAIL_FROM / MAILJET / SMTP settings. " +
+          "A sandbox mail account only delivers to verified recipients."
       );
 
       return res.status(503).json({
         success: false,
-        message: "Unable to send OTP. Please try again.",
+        code: "EMAIL_DELIVERY_FAILED",
+        message:
+          "We could not send the verification email. Check the address and try again.",
       });
     }
 
@@ -428,7 +438,7 @@ const resendUserOTP = async (req, res) => {
         },
       },
       {
-        new: true,
+        returnDocument: "after",
       }
     );
 

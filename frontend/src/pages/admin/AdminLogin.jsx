@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import BrandLogo from "../../components/BrandLogo";
+import PasswordInput from "../../components/PasswordInput";
 import { API_BASE_URL } from "../../config/api";
 import { invalidateAdminSession } from "../../utils/adminSession";
 import "./AdminLogin.css";
@@ -94,9 +95,8 @@ function AdminLogin() {
                 Password
               </label>
 
-              <input
+              <PasswordInput
                 id="admin-password"
-                type="password"
                 placeholder="Your password"
                 value={password}
                 maxLength={128}

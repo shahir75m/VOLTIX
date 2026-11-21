@@ -396,7 +396,7 @@ const restoreProduct = async (req, res) => {
     const product = await Product.findOneAndUpdate(
       { _id: req.params.id, isDeleted: true },
       { $set: { isDeleted: false, deletedAt: null } },
-      { new: true }
+      { returnDocument: "after" }
     );
     if (!product) return res.status(404).json({ success: false, message: "Deleted product not found" });
 

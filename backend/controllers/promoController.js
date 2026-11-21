@@ -150,7 +150,7 @@ const restoreCoupon = async (req, res) => {
     const coupon = await Coupon.findOneAndUpdate(
       { _id: req.params.id, isDeleted: true },
       { $set: { isDeleted: false, deletedAt: null } },
-      { new: true }
+      { returnDocument: "after" }
     );
     if (!coupon) return fail(res, 404, "Deleted coupon not found");
     return res.status(200).json({ success: true, message: "Coupon restored", coupon: serializeCoupon(coupon.toObject()) });
@@ -303,7 +303,7 @@ const restoreOffer = async (req, res) => {
     const offer = await Offer.findOneAndUpdate(
       { _id: req.params.id, isDeleted: true },
       { $set: { isDeleted: false, deletedAt: null } },
-      { new: true }
+      { returnDocument: "after" }
     ).populate("category", "name");
     if (!offer) return fail(res, 404, "Deleted offer not found");
     return res.status(200).json({ success: true, message: "Offer restored", offer: serializeOffer(offer.toObject()) });

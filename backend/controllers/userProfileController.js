@@ -98,7 +98,7 @@ const updateUserProfile = async (req, res) => {
         $set: updateFields,
       },
       {
-        new: true,
+        returnDocument: "after",
         runValidators: true,
       }
     );

@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import BrandLogo from "../../components/BrandLogo";
+import PasswordInput from "../../components/PasswordInput";
+import PasswordChecklist from "../../components/PasswordChecklist";
 import { API_BASE_URL } from "../../config/api";
+import { evaluatePassword } from "../../utils/passwordRules";
+import { validateEmail } from "../../utils/emailRules";
+import { primeUserSession } from "../../utils/userSession";
 import "./UserLogin.css";
 import "./UserRegister.css";
 
@@ -29,20 +34,15 @@ const validateField = (field, values) => {
     }
     case "email": {
       const cleanEmail = value.trim();
-      if (cleanEmail.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
-        return "Please enter a valid email address.";
-      }
-      return "";
+      if (cleanEmail.length > 254) return "Email address is too long.";
+      return validateEmail(cleanEmail).message;
     }
     case "phone":
       return /^[6-9]\d{9}$/.test(value.trim())
         ? ""
         : "Enter a valid 10-digit Indian mobile number.";
     case "password":
-      if (value.length < 8) return "Password must contain at least 8 characters.";
-      if (value.length > 128) return "Password cannot exceed 128 characters.";
-      if (!value.trim()) return "Password cannot contain only spaces.";
-      return "";
+      return evaluatePassword(value, values).message;
     case "confirmPassword":
       if (!value) return "Please confirm your password.";
       return value === values.password ? "" : "Passwords do not match.";
@@ -62,6 +62,7 @@ function UserRegister() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
 
   const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
   const googleButtonRef = useRef(null);
@@ -94,7 +95,8 @@ function UserRegister() {
             }
 
             setSuccess("Google login successful!");
-            navigate("/home", { replace: true });
+            primeUserSession(data.user);
+            navigate("/", { replace: true });
           } catch (err) {
             setError(err.message || "Google authentication failed");
           } finally {
@@ -193,8 +195,38 @@ function UserRegister() {
           password: formData.password,
         }),
       });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Registration failed.");
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        // Field-level errors (wrong email format, weak password, email already used)
+        // are shown under the field instead of only in the generic banner.
+        const serverErrors = data.errors && typeof data.errors === "object" ? data.errors : {};
+
+        if (Object.keys(serverErrors).length > 0) {
+          setFieldErrors((previous) => ({ ...previous, ...serverErrors }));
+          setError("");
+          const firstField = fieldNames.find((field) => serverErrors[field]);
+          if (firstField) document.getElementById(`register-${firstField}`)?.focus();
+          return;
+        }
+
+        if (response.status === 409) {
+          const message = data.message || "An account with this email already exists.";
+          setFieldErrors((previous) => ({ ...previous, email: message }));
+          document.getElementById("register-email")?.focus();
+          return;
+        }
+
+        if (response.status === 503) {
+          throw new Error(
+            `We could not send the verification code to ${formData.email.trim()}. ` +
+              "Check the address (and the spam folder) and try again."
+          );
+        }
+
+        throw new Error(data.message || "Registration failed.");
+      }
+
       if (!data.requiresOTP || !data.challenge) {
         throw new Error("Invalid verification response from server.");
       }
@@ -235,6 +267,8 @@ function UserRegister() {
       </p>
     ) : null;
 
+  const passwordEvaluation = evaluatePassword(formData.password, formData);
+
   return (
     <div className="voltix-user-login-page">
       {/* HEADER */}
@@ -242,14 +276,35 @@ function UserRegister() {
         <div className="voltix-user-navbar">
           <Link to="/" className="voltix-user-logo"><BrandLogo /></Link>
           <div className="voltix-user-search">
-            <input type="search" placeholder="Search phones, earbuds, laptops..." aria-label="Search products" />
-            <button type="button">Search</button>
+            <input
+              type="search"
+              placeholder="Search phones, earbuds, laptops..."
+              aria-label="Search products"
+              value={search}
+              maxLength={100}
+              onChange={(event) => setSearch(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key !== "Enter") return;
+                event.preventDefault();
+                const term = search.trim();
+                navigate(term ? `/products?search=${encodeURIComponent(term)}` : "/products");
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => {
+                const term = search.trim();
+                navigate(term ? `/products?search=${encodeURIComponent(term)}` : "/products");
+              }}
+            >
+              Search
+            </button>
           </div>
           <nav className="voltix-user-header-links">
-            <a href="#offers">Offers</a>
-            <a href="#wishlist">Wishlist</a>
-            <a href="#cart">Cart · 2</a>
-            <a href="#account">My account</a>
+            <Link to="/products">Shop</Link>
+            <Link to="/offers">Offers</Link>
+            <Link to="/wishlist">Wishlist</Link>
+            <Link to="/cart">Cart</Link>
             <Link to="/login">Login</Link>
           </nav>
         </div>
@@ -288,6 +343,11 @@ function UserRegister() {
                 {...fieldProps("email")}
               />
               {fieldError("email")}
+              {!fieldErrors.email && (
+                <p style={{ color: "#667085", fontSize: "12px", marginTop: "5px" }}>
+                  We&apos;ll send a 6-digit code here to confirm the address is real.
+                </p>
+              )}
             </div>
 
             <div className="voltix-user-form-group">
@@ -306,22 +366,28 @@ function UserRegister() {
 
             <div className="voltix-user-form-group">
               <label htmlFor="register-password">Password</label>
-              <input
+              <PasswordInput
                 id="register-password"
-                type="password"
-                placeholder="Create a password"
+                placeholder="Create a strong password"
                 autoComplete="new-password"
                 maxLength={128}
                 {...fieldProps("password")}
+                aria-describedby={
+                  fieldErrors.password ? "register-password-error" : "register-password-rules"
+                }
               />
               {fieldError("password")}
+              <PasswordChecklist
+                id="register-password-rules"
+                password={formData.password}
+                evaluation={passwordEvaluation}
+              />
             </div>
 
             <div className="voltix-user-form-group">
               <label htmlFor="register-confirm-password">Confirm password</label>
-              <input
+              <PasswordInput
                 id="register-confirm-password"
-                type="password"
                 placeholder="Repeat the password"
                 autoComplete="new-password"
                 maxLength={128}
@@ -389,15 +455,15 @@ function UserRegister() {
           </div>
           <div className="voltix-footer-column">
             <h3>Shop</h3>
-            <a href="#products">All products</a>
-            <a href="#wishlist">Wishlist</a>
-            <a href="#cart">Cart</a>
+            <Link to="/products">All products</Link>
+            <Link to="/wishlist">Wishlist</Link>
+            <Link to="/cart">Cart</Link>
           </div>
           <div className="voltix-footer-column">
             <h3>Account</h3>
             <Link to="/login">Login</Link>
             <Link to="/register">Create account</Link>
-            <a href="#orders">My orders</a>
+            <Link to="/orders">My orders</Link>
           </div>
           <div className="voltix-footer-column">
             <h3>Help</h3>

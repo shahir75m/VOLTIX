@@ -234,7 +234,7 @@ const createOrder = async (req, res) => {
             $inc: { balance: -totals.totalPrice },
             $push: { transactions: { type: "Debit", amount: totals.totalPrice, description: `Payment for order #${orderId}`, sourceOrderId: doc._id } },
           },
-          { new: true, session }
+          { returnDocument: "after", session }
         );
         if (!wallet) throw new OrderError("Insufficient wallet balance. Choose another payment method or request store credit after a return.", 409);
         svc.addStatus(doc, "Confirmed", "payment", "Paid using wallet balance");
@@ -456,7 +456,7 @@ const recordPaymentFailure = async (req, res) => {
         paymentStatus: { $in: ["Pending", "Failed"] }, // a paid order can never be flipped back to Failed
       },
       { $set: { paymentStatus: "Failed" }, $push: { paymentLogs: { event: "payment_failed", note: reason, amount: 0 } } },
-      { new: true }
+      { returnDocument: "after" }
     );
     const order = updated || (await Order.findOne({ _id: req.params.id, user: req.user._id }));
     if (!order) throw new OrderError("Order not found", 404);
@@ -691,7 +691,7 @@ const requestReturn = async (req, res) => {
           },
         },
       },
-      { new: true }
+      { returnDocument: "after" }
     ).select(svc.PRIVATE_ORDER_FIELDS);
     if (!order) throw new OrderError("A return request has already been submitted for this order");
 

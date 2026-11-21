@@ -6,7 +6,7 @@ exports.getMyWallet = async (req, res) => {
     const wallet = await Wallet.findOneAndUpdate(
       { user: req.user._id },
       { $setOnInsert: { balance: 0, transactions: [] } },
-      { new: true, upsert: true, setDefaultsOnInsert: true }
+      { returnDocument: "after", upsert: true, setDefaultsOnInsert: true }
     ).lean();
     return res.status(200).json({
       success: true,

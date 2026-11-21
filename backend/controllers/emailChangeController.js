@@ -98,7 +98,7 @@ if (
       },
       {
         upsert: true,
-        new: true,
+        returnDocument: "after",
         runValidators: true,
       }
     );
