@@ -38,42 +38,42 @@ async function seedDemoProducts() {
   for (const c of cats) catMap[c.nameKey] = c._id;
   const brand = await Brand.findOne({ nameKey: key("VORTIX") });
 
-  // product templates: name, category (must match catMap key), brand, variantOptions, basePrice, baseMRP, baseStock
+  // product templates: name, category key (must match catMap key), brand, variantOptions, basePrice, baseMRP, baseStock
   const productTemplates = [
     // Mobile phones
-    { name: "VORTIX X1 Pro", cat: "Mobiles", brand: "VORTIX", variantOptions: ["Colour", "Storage"], basePrice: 29990, baseMRP: 34990, baseStock: 40 },
-    { name: "VORTIX S5", cat: "Mobiles", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 19990, baseMRP: 23990, baseStock: 60 },
-    { name: "VORTIX A10", cat: "Mobiles", brand: "VORTIX", variantOptions: ["Colour", "Storage"], basePrice: 24990, baseMRP: 29990, baseStock: 30 },
-    { name: "PowerMax P1", cat: "Mobiles", brand: "PowerMax", variantOptions: ["Colour"], basePrice: 15990, baseMRP: 19990, baseStock: 50 },
-    { name: "SmartConnect X", cat: "Mobiles", brand: "SmartConnect", variantOptions: ["Colour"], basePrice: 12990, baseMRP: 15990, baseStock: 70 },
+    { name: "VORTIX X1 Pro", catKey: "mobiles", brand: "VORTIX", variantOptions: ["Colour", "Storage"], basePrice: 29990, baseMRP: 34990, baseStock: 40 },
+    { name: "VORTIX S5", catKey: "mobiles", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 19990, baseMRP: 23990, baseStock: 60 },
+    { name: "VORTIX A10", catKey: "mobiles", brand: "VORTIX", variantOptions: ["Colour", "Storage"], basePrice: 24990, baseMRP: 29990, baseStock: 30 },
+    { name: "PowerMax P1", catKey: "mobiles", brand: "PowerMax", variantOptions: ["Colour"], basePrice: 15990, baseMRP: 19990, baseStock: 50 },
+    { name: "SmartConnect X", catKey: "mobiles", brand: "SmartConnect", variantOptions: ["Colour"], basePrice: 12990, baseMRP: 15990, baseStock: 70 },
 
     // Headphones
-    { name: "VORTIX Pulse Wireless", cat: "Headphones", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 2499, baseMRP: 3999, baseStock: 25 },
-    { name: "VORTIX BassBud", cat: "Headphones", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 1299, baseMRP: 1999, baseStock: 80 },
-    { name: "NoiseGear Pro", cat: "Headphones", brand: "NoiseGear", variantOptions: ["Colour"], basePrice: 3499, baseMRP: 4499, baseStock: 15 },
-    { name: "EchoFit TWS", cat: "Headphones", brand: "EchoFit", variantOptions: ["Colour"], basePrice: 899, baseMRP: 1299, baseStock: 120 },
-    { name: "StudioSound 2", cat: "Headphones", brand: "StudioSound", variantOptions: ["Colour"], basePrice: 2999, baseMRP: 4500, baseStock: 20 },
+    { name: "VORTIX Pulse Wireless", catKey: "headphones", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 2499, baseMRP: 3999, baseStock: 25 },
+    { name: "VORTIX BassBud", catKey: "headphones", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 1299, baseMRP: 1999, baseStock: 80 },
+    { name: "NoiseGear Pro", catKey: "headphones", brand: "NoiseGear", variantOptions: ["Colour"], basePrice: 3499, baseMRP: 4499, baseStock: 15 },
+    { name: "EchoFit TWS", catKey: "headphones", brand: "EchoFit", variantOptions: ["Colour"], basePrice: 899, baseMRP: 1299, baseStock: 120 },
+    { name: "StudioSound 2", catKey: "headphones", brand: "StudioSound", variantOptions: ["Colour"], basePrice: 2999, baseMRP: 4500, baseStock: 20 },
 
     // Power Banks
-    { name: "VORTIX Power 10000", cat: "Power Banks", brand: "VORTIX", variantOptions: ["Capacity"], basePrice: 1299, baseMRP: 1499, baseStock: 100 },
-    { name: "VORTIX Power 20000", cat: "Power Banks", brand: "VORTIX", variantOptions: ["Capacity"], basePrice: 2199, baseMRP: 2499, baseStock: 60 },
-    { name: "ChargeMaster Pro", cat: "Power Banks", brand: "ChargeMaster", variantOptions: ["Capacity"], basePrice: 1799, baseMRP: 2299, baseStock: 45 },
-    { name: "QuickPower 10K", cat: "Power Banks", brand: "QuickPower", variantOptions: ["Capacity"], basePrice: 999, baseMRP: 1299, baseStock: 150 },
-    { name: "EnergyBoost 20K", cat: "Power Banks", brand: "EnergyBoost", variantOptions: ["Capacity"], basePrice: 2499, baseMRP: 2999, baseStock: 30 },
+    { name: "VORTIX Power 10000", catKey: "power-banks", brand: "VORTIX", variantOptions: ["Capacity"], basePrice: 1299, baseMRP: 1499, baseStock: 100 },
+    { name: "VORTIX Power 20000", catKey: "power-banks", brand: "VORTIX", variantOptions: ["Capacity"], basePrice: 2199, baseMRP: 2499, baseStock: 60 },
+    { name: "ChargeMaster Pro", catKey: "power-banks", brand: "ChargeMaster", variantOptions: ["Capacity"], basePrice: 1799, baseMRP: 2299, baseStock: 45 },
+    { name: "QuickPower 10K", catKey: "power-banks", brand: "QuickPower", variantOptions: ["Capacity"], basePrice: 999, baseMRP: 1299, baseStock: 150 },
+    { name: "EnergyBoost 20K", catKey: "power-banks", brand: "EnergyBoost", variantOptions: ["Capacity"], basePrice: 2499, baseMRP: 2999, baseStock: 30 },
 
     // Speakers
-    { name: "VORTIX BoomBox", cat: "Speakers", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 3999, baseMRP: 4999, baseStock: 20 },
-    { name: "VORTIX BeatsBud", cat: "Speakers", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 1999, baseMRP: 2499, baseStock: 50 },
-    { name: "BassBox X", cat: "Speakers", brand: "BassBox", variantOptions: ["Colour"], basePrice: 2799, baseMRP: 3500, baseStock: 35 },
-    { name: "PartyLoud 5G", cat: "Speakers", brand: "PartyLoud", variantOptions: ["Colour"], basePrice: 1599, baseMRP: 1999, baseStock: 70 },
-    { name: "ClearTone Mini", cat: "Speakers", brand: "ClearTone", variantOptions: ["Colour"], basePrice: 899, baseMRP: 1299, baseStock: 100 },
+    { name: "VORTIX BoomBox", catKey: "speakers", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 3999, baseMRP: 4999, baseStock: 20 },
+    { name: "VORTIX BeatsBud", catKey: "speakers", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 1999, baseMRP: 2499, baseStock: 50 },
+    { name: "BassBox X", catKey: "speakers", brand: "BassBox", variantOptions: ["Colour"], basePrice: 2799, baseMRP: 3500, baseStock: 35 },
+    { name: "PartyLoud 5G", catKey: "speakers", brand: "PartyLoud", variantOptions: ["Colour"], basePrice: 1599, baseMRP: 1999, baseStock: 70 },
+    { name: "ClearTone Mini", catKey: "speakers", brand: "ClearTone", variantOptions: ["Colour"], basePrice: 899, baseMRP: 1299, baseStock: 100 },
 
     // Laptops
-    { name: "VORTIX UltraBook", cat: "Laptops", brand: "VORTIX", variantOptions: ["RAM", "Storage"], basePrice: 59990, baseMRP: 69990, baseStock: 15 },
-    { name: "VORTIX Gaming Pro", cat: "Laptops", brand: "VORTIX", variantOptions: ["RAM", "Storage"], basePrice: 89990, baseMRP: 99990, baseStock: 10 },
-    { name: "SpeedNote 14", cat: "Laptops", brand: "SpeedNote", variantOptions: ["RAM", "Storage"], basePrice: 45990, baseMRP: 52990, baseStock: 25 },
-    { name: "WorkMate Pro", cat: "Laptops", brand: "WorkMate", variantOptions: ["RAM", "Storage"], basePrice: 52990, baseMRP: 62990, baseStock: 20 },
-    { name: "LiteBook Go", cat: "Laptops", brand: "LiteBook", variantOptions: ["RAM", "Storage"], basePrice: 39990, baseMRP: 45990, baseStock: 35 },
+    { name: "VORTIX UltraBook", catKey: "laptops", brand: "VORTIX", variantOptions: ["RAM", "Storage"], basePrice: 59990, baseMRP: 69990, baseStock: 15 },
+    { name: "VORTIX Gaming Pro", catKey: "laptops", brand: "VORTIX", variantOptions: ["RAM", "Storage"], basePrice: 89990, baseMRP: 99990, baseStock: 10 },
+    { name: "SpeedNote 14", catKey: "laptops", brand: "SpeedNote", variantOptions: ["RAM", "Storage"], basePrice: 45990, baseMRP: 52990, baseStock: 25 },
+    { name: "WorkMate Pro", catKey: "laptops", brand: "WorkMate", variantOptions: ["RAM", "Storage"], basePrice: 52990, baseMRP: 62990, baseStock: 20 },
+    { name: "LiteBook Go", catKey: "laptops", brand: "LiteBook", variantOptions: ["RAM", "Storage"], basePrice: 39990, baseMRP: 45990, baseStock: 35 },
   ];
 
   const variantAttrs = {
@@ -83,14 +83,20 @@ async function seedDemoProducts() {
     RAM: ["8 GB", "16 GB", "32 GB"],
   };
 
+  // map catKey to display tag
+  const catTags = {
+    mobiles: "mobiles", headphones: "headphones", "power-banks": "power-banks",
+    speakers: "speakers", laptops: "laptops"
+  };
+
   let created = 0;
   for (let i = 0; i < productTemplates.length; i++) {
     const t = productTemplates[i];
-    const catKey = key(t.cat);
+    const catKey = t.catKey;
     const attrList = variantAttrs[t.variantOptions?.[0] || "Colour"] || ["Default"];
 
-    // build lower-case tag from category name safely
-    const tagCat = catMap[catKey] ? catKey : "electronics";
+    // use pre-mapped tag
+    const tag = catTags[catKey] || "electronics";
 
     const variants = [];
     const numVariants = Math.min(3, attrList.length);
@@ -110,8 +116,8 @@ async function seedDemoProducts() {
     const payload = {
       name: t.name,
       slug: t.name.toLowerCase().replace(/\s+/g, "-") + "-" + i,
-      shortDescription: `${t.name} - premium ${t.cat.toLowerCase()} experience`,
-      description: `VORTIX quality ${t.cat.toLower()}. Premium features and reliable performance.`,
+      shortDescription: `${t.name} - premium ${tag} experience`,
+      description: `VORTIX quality ${tag}. Premium features and reliable performance.`,
       category: catMap[catKey] || null,
       brand: brand._id,
       gstPercent: 18,
@@ -133,7 +139,7 @@ async function seedDemoProducts() {
       isFeatured: i % 5 === 0,
       newArrival: i % 3 === 0,
       isBestSeller: i % 7 === 0,
-      tags: [tagCat, "electronics"],
+      tags: [tag, "electronics"],
     };
 
     // Upsert by slug
