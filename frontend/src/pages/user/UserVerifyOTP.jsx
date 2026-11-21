@@ -307,8 +307,7 @@ function UserVerifyOTP() {
           </p>
 
           <p className="voltix-otp-description" style={{ fontSize: "12px" }}>
-            Didn&apos;t get it? Check the spam / junk folder first, then use “Resend OTP”.
-            A code sent to a made-up address can never arrive, so use an email you can open.
+            Use “Resend OTP” if you need another code.
           </p>
 
           <form onSubmit={handleVerify}>
