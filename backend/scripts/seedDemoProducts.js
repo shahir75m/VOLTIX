@@ -154,13 +154,15 @@ async function seedDemoProducts() {
     }
 
     const image = { url: `/vortix-demo-${String(i).padStart(2, "0")}.svg`, publicId: `vortix-demo-${String(i).padStart(2, "0")}`, alt: t.name };
+    let resolvedCat = catMap[catKey];
+    if (!resolvedCat && catKey.endsWith("2")) resolvedCat = catMap[catKey.slice(0, -1)];
+    if (!resolvedCat) resolvedCat = null;
     const payload = {
       name: t.name,
       slug: t.name.toLowerCase().replace(/\s+/g, "-") + "-" + i,
       shortDescription: `${t.name} - premium ${tag} experience`,
       description: `VORTIX quality ${tag}. Premium features and reliable performance.`,
-      const resolvedCat = catKey.endsWith("2") ? catMap[catKey.slice(0, -1)] : catMap[catKey];
-    category: resolvedCat || null,
+      category: resolvedCat,
       brand: brand._id,
       gstPercent: 18,
       price: t.basePrice,
