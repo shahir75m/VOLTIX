@@ -125,9 +125,7 @@ async function seedDemoProducts() {
   // map catKey to display tag
   const catTags = {
     mobiles: "mobiles", headphones: "headphones", "power-banks": "power-banks",
-    speakers: "speakers", laptops: "laptops",
-    // additional catKeys from part 2
-    mobiles2: "mobiles", headphones2: "headphones", power-banks2: "power-banks", speakers2: "speakers", laptops2: "laptops"
+    speakers: "speakers", laptops: "laptops"
   };
 
   const productTemplates = [...productTemplatesPart1, ...productTemplatesPart2];
@@ -138,7 +136,8 @@ async function seedDemoProducts() {
     const attrList = variantAttrs[t.variantOptions?.[0] || "Colour"] || ["Default"];
 
     // use pre-mapped tag (support both part1 catKey and part2 catKey variants)
-    const tag = catTags[catKey] || catTags[catKey + "2"] || "electronics";
+    const baseTag = catTags[catKey] || (catKey.endsWith("2") ? catTags[catKey.slice(0, -1)] : "");
+    const tag = baseTag || "electronics";
 
     const variants = [];
     const numVariants = Math.min(3, attrList.length);
@@ -160,7 +159,8 @@ async function seedDemoProducts() {
       slug: t.name.toLowerCase().replace(/\s+/g, "-") + "-" + i,
       shortDescription: `${t.name} - premium ${tag} experience`,
       description: `VORTIX quality ${tag}. Premium features and reliable performance.`,
-      category: catMap[catKey] || catMap[catKey + "2"] || null,
+      const resolvedCat = catKey.endsWith("2") ? catMap[catKey.slice(0, -1)] : catMap[catKey];
+    category: resolvedCat || null,
       brand: brand._id,
       gstPercent: 18,
       price: t.basePrice,
