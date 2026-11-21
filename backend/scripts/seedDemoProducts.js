@@ -1,4 +1,5 @@
-// Bulk seed script: adds 50 demo products (mobiles, headsets, powerbanks, speakers, laptops)
+// Bulk seed script: adds 50 original-brand products (Samsung, Apple, Acer, Boat, etc.)
+// across mobiles, headphones, powerbanks, speakers, laptops
 // Run from backend: node scripts/seedDemoProducts.js
 // Requires: MONGO_URI in backend/.env, and existing Categories & Brands
 
@@ -27,156 +28,198 @@ async function seedDemoProducts() {
       { upsert: true }
     );
   }
-  await Brand.collection.updateOne(
-    { nameKey: key("VORTIX") },
-    { $setOnInsert: { name: "VORTIX", nameKey: key("VORTIX"), normalizedName: key("VORTIX"), isDeleted: false, deletedAt: null, updatedAt: now } },
-    { upsert: true }
-  );
+  // Ensure original brands exist
+  const brandNames = ["Samsung", "Apple", "Xiaomi", "acer", "Boat", "OnePlus", "Sony", "LG", "Nokia", "Google"];
+  for (const b of brandNames) {
+    await Brand.collection.updateOne(
+      { nameKey: key(b) },
+      { $setOnInsert: { name: b, nameKey: key(b), normalizedName: key(b), isDeleted: false, deletedAt: null, updatedAt: now } },
+      { upsert: true }
+    );
+  }
 
   const cats = await Category.find({ nameKey: { $in: catNames.map(key) } }).lean();
   const catMap = {};
   for (const c of cats) catMap[c.nameKey] = c._id;
-  const brand = await Brand.findOne({ nameKey: key("VORTIX") });
+  const brands = await Brand.find({ nameKey: { $in: brandNames.map(key) } }).lean();
+  const brandMap = {};
+  for (const b of brands) brandMap[b.nameKey] = b._id;
 
-  // product templates: name, category key (must match catMap key), brand, variantOptions, basePrice, baseMRP, baseStock
-  // First 25 products (5 per category)
-  const productTemplatesPart1 = [
-    // Mobile phones
-    { name: "VORTIX X1 Pro", catKey: "mobiles", brand: "VORTIX", variantOptions: ["Colour", "Storage"], basePrice: 29990, baseMRP: 34990, baseStock: 40 },
-    { name: "VORTIX S5", catKey: "mobiles", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 19990, baseMRP: 23990, baseStock: 60 },
-    { name: "VORTIX A10", catKey: "mobiles", brand: "VORTIX", variantOptions: ["Colour", "Storage"], basePrice: 24990, baseMRP: 29990, baseStock: 30 },
-    { name: "PowerMax P1", catKey: "mobiles", brand: "PowerMax", variantOptions: ["Colour"], basePrice: 15990, baseMRP: 19990, baseStock: 50 },
-    { name: "SmartConnect X", catKey: "mobiles", brand: "SmartConnect", variantOptions: ["Colour"], basePrice: 12990, baseMRP: 15990, baseStock: 70 },
+  // ------------------------------------------------------------------
+  // 50 products with real brand names and product names.
+  // Each entry: brand, category key (matches catMap), product name,
+  // SKU, price, MRP, stock, and optional variantOptions/variants.
+  // ------------------------------------------------------------------
 
-    // Headphones
-    { name: "VORTIX Pulse Wireless", catKey: "headphones", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 2499, baseMRP: 3999, baseStock: 25 },
-    { name: "VORTIX BassBud", catKey: "headphones", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 1299, baseMRP: 1999, baseStock: 80 },
-    { name: "NoiseGear Pro", catKey: "headphones", brand: "NoiseGear", variantOptions: ["Colour"], basePrice: 3499, baseMRP: 4499, baseStock: 15 },
-    { name: "EchoFit TWS", catKey: "headphones", brand: "EchoFit", variantOptions: ["Colour"], basePrice: 899, baseMRP: 1299, baseStock: 120 },
-    { name: "StudioSound 2", catKey: "headphones", brand: "StudioSound", variantOptions: ["Colour"], basePrice: 2999, baseMRP: 4500, baseStock: 20 },
+  const products = [
+    // === MOBILES (10) ===
+    { brand: "Samsung", cat: "Mobiles", name: "Galaxy S25 Ultra", sku: "SAMSUNG-S25U", price: 129990, mrp: 144990, stock: 25,
+      variantOptions: ["Storage"], variants: [{ attributes: [{ name: "Storage", value: "256 GB" }], price: 129990, mrp: 144990, stock: 25, sku: "SAMSUNG-S25U-256" }] },
+    { brand: "Apple", cat: "Mobiles", name: "iPhone 15 Pro", sku: "APPLE-IP15P", price: 135000, mrp: 155000, stock: 30,
+      variantOptions: ["Storage"], variants: [{ attributes: [{ name: "Storage", value: "128 GB" }], price: 135000, mrp: 155000, stock: 30, sku: "APPLE-IP15P-128" }] },
+    { brand: "Xiaomi", cat: "Mobiles", name: "14 Ultra", sku: "XIAOMI-14U", price: 69990, mrp: 79990, stock: 40,
+      variantOptions: ["Storage"], variants: [{ attributes: [{ name: "Storage", value: "256 GB" }], price: 69990, mrp: 79990, stock: 40, sku: "XIAOMI-14U-256" }] },
+    { brand: "acer", cat: "Mobiles", name: "Liquid S220", sku: "ACER-LIQS22", price: 15990, mrp: 19990, stock: 50,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "Black" }], price: 15990, mrp: 19990, stock: 50, sku: "ACER-LIQS22-BLK" }] },
+    { brand: "Boat", cat: "Mobiles", name: "StormX1", sku: "BOAT-STX1", price: 12990, mrp: 15990, stock: 60,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "Blue" }], price: 12990, mrp: 15990, stock: 60, sku: "BOAT-STX1-BLU" }] },
+    { brand: "OnePlus", cat: "Mobiles", name: "12R", sku: "ONEPLUS-12R", price: 59990, mrp: 69990, stock: 35,
+      variantOptions: ["Storage"], variants: [{ attributes: [{ name: "Storage", value: "128 GB" }], price: 59990, mrp: 69990, stock: 35, sku: "ONEPLUS-12R-128" }] },
+    { brand: "Sony", cat: "Mobiles", name: "Xperia 1 VI", sku: "SONY-X1VI", price: 99990, mrp: 119990, stock: 20,
+      variantOptions: ["Storage"], variants: [{ attributes: [{ name: "Storage", value: "256 GB" }], price: 99990, mrp: 119990, stock: 20, sku: "SONY-X1VI-256" }] },
+    { brand: "LG", cat: "Mobiles", name: "Wing 4", sku: "LG-WING4", price: 45990, mrp: 55990, stock: 45,
+      variantOptions: ["Storage"], variants: [{ attributes: [{ name: "Storage", value: "128 GB" }], price: 45990, mrp: 55990, stock: 45, sku: "LG-WING4-128" }] },
+    { brand: "Nokia", cat: "Mobiles", name: "X30 5G", sku: "NOKIA-X30", price: 42990, mrp: 49990, stock: 55,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "Grey" }], price: 42990, mrp: 49990, stock: 55, sku: "NOKIA-X30-GRY" }] },
+    { brand: "Google", cat: "Mobiles", name: "Pixel 8 Pro", sku: "GOOGLE-P8P", price: 109990, mrp: 125000, stock: 28,
+      variantOptions: ["Storage"], variants: [{ attributes: [{ name: "Storage", value: "256 GB" }], price: 109990, mrp: 125000, stock: 28, sku: "GOOGLE-P8P-256" }] },
 
-    // Power Banks
-    { name: "VORTIX Power 10000", catKey: "power-banks", brand: "VORTIX", variantOptions: ["Capacity"], basePrice: 1299, baseMRP: 1499, baseStock: 100 },
-    { name: "VORTIX Power 20000", catKey: "power-banks", brand: "VORTIX", variantOptions: ["Capacity"], basePrice: 2199, baseMRP: 2499, baseStock: 60 },
-    { name: "ChargeMaster Pro", catKey: "power-banks", brand: "ChargeMaster", variantOptions: ["Capacity"], basePrice: 1799, baseMRP: 2299, baseStock: 45 },
-    { name: "QuickPower 10K", catKey: "power-banks", brand: "QuickPower", variantOptions: ["Capacity"], basePrice: 999, baseMRP: 1299, baseStock: 150 },
-    { name: "EnergyBoost 20K", catKey: "power-banks", brand: "EnergyBoost", variantOptions: ["Capacity"], basePrice: 2499, baseMRP: 2999, baseStock: 30 },
+    // === HEADPHONES (10) ===
+    { brand: "Samsung", cat: "Headphones", name: "Galaxy Buds3", sku: "SAMSUNG-Buds3", price: 14990, mrp: 19990, stock: 80,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "White" }], price: 14990, mrp: 19990, stock: 80, sku: "SAMSUNG-Buds3-WH" }] },
+    { brand: "Apple", cat: "Headphones", name: "AirPods Pro 2", sku: "APPLE-AP2", price: 24990, mrp: 29990, stock: 70,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "Magenta" }], price: 24990, mrp: 29990, stock: 70, sku: "APPLE-AP2-MAG" }] },
+    { brand: "Xiaomi", cat: "Headphones", name: "HyperSound 2.0", sku: "XIAOMI-HS2", price: 8990, mrp: 11990, stock: 100,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "Black" }], price: 8990, mrp: 11990, stock: 100, sku: "XIAOMI-HS2-BLK" }] },
+    { brand: "acer", cat: "Headphones", name: "TrueHear T1", sku: "ACER-THR1", price: 5990, mrp: 7990, stock: 120,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "Silver" }], price: 5990, mrp: 7990, stock: 120, sku: "ACER-THR1-SLV" }] },
+    { brand: "Boat", cat: "Headphones", name: "Airdopes 141", sku: "BOAT-AD141", price: 3490, mrp: 4490, stock: 150,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "Red" }], price: 3490, mrp: 4490, stock: 150, sku: "BOAT-AD141-RED" }] },
+    { brand: "OnePlus", cat: "Headphones", name: "Nord Buds 2r", sku: "ONEPLUS-NB2", price: 5490, mrp: 6990, stock: 90,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "Green" }], price: 5490, mrp: 6990, stock: 90, sku: "ONEPLUS-NB2-GRN" }] },
+    { brand: "Sony", cat: "Headphones", name: "WH-1000XM5", sku: "SONY-WH1000XM5", price: 32990, mrp: 39990, stock: 45,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "Black" }], price: 32990, mrp: 39990, stock: 45, sku: "SONY-WH1000XM5-BLK" }] },
+    { brand: "LG", cat: "Headphones", name: "Tone Free FP9", sku: "LG-TF9", price: 7990, mrp: 9990, stock: 60,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "Blue" }], price: 7990, mrp: 9990, stock: 60, sku: "LG-TF9-BLU" }] },
+    { brand: "Nokia", cat: "Headphones", name: "Buds+", sku: "NOKIA-BP", price: 4490, mrp: 5490, stock: 110,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "Black" }], price: 4490, mrp: 5490, stock: 110, sku: "NOKIA-BP-BLK" }] },
+    { brand: "Google", cat: "Headphones", name: "Pixel Buds Pro", sku: "GOOGLE-BP", price: 17990, mrp: 22990, stock: 55,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "Charcoal" }], price: 17990, mrp: 22990, stock: 55, sku: "GOOGLE-BP-CHL" }] },
 
-    // Speakers
-    { name: "VORTIX BoomBox", catKey: "speakers", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 3999, baseMRP: 4999, baseStock: 20 },
-    { name: "VORTIX BeatsBud", catKey: "speakers", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 1999, baseMRP: 2499, baseStock: 50 },
-    { name: "BassBox X", catKey: "speakers", brand: "BassBox", variantOptions: ["Colour"], basePrice: 2799, baseMRP: 3500, baseStock: 35 },
-    { name: "PartyLoud 5G", catKey: "speakers", brand: "PartyLoud", variantOptions: ["Colour"], basePrice: 1599, baseMRP: 1999, baseStock: 70 },
-    { name: "ClearTone Mini", catKey: "speakers", brand: "ClearTone", variantOptions: ["Colour"], basePrice: 899, baseMRP: 1299, baseStock: 100 },
+    // === POWER BANKS (10) ===
+    { brand: "Samsung", cat: "Power Banks", name: "PowerShare 10000", sku: "SAMSUNG-PB10K", price: 2490, mrp: 2990, stock: 200,
+      variantOptions: ["Capacity"], variants: [{ attributes: [{ name: "Capacity", value: "10000 mAh" }], price: 2490, mrp: 2990, stock: 200, sku: "SAMSUNG-PB10K-10K" }] },
+    { brand: "Apple", cat: "Power Banks", name: "MagSafe Battery Pack", sku: "APPLE-MBP", price: 9990, mrp: 12990, stock: 150,
+      variantOptions: ["Capacity"], variants: [{ attributes: [{ name: "Capacity", value: "10000 mAh" }], price: 9990, mrp: 12990, stock: 150, sku: "APPLE-MBP-10K" }] },
+    { brand: "Xiaomi", cat: "Power Banks", name: "Mi Power Bank 3", sku: "XIAOMI-PB3", price: 1690, mrp: 1990, stock: 250,
+      variantOptions: ["Capacity"], variants: [{ attributes: [{ name: "Capacity", value: "10000 mAh" }], price: 1690, mrp: 1990, stock: 250, sku: "XIAOMI-PB3-10K" }] },
+    { brand: "acer", cat: "Power Banks", name: "PowerLite 20000", sku: "ACER-PB20K", price: 3290, mrp: 3990, stock: 180,
+      variantOptions: ["Capacity"], variants: [{ attributes: [{ name: "Capacity", value: "20000 mAh" }], price: 3290, mrp: 3990, stock: 180, sku: "ACER-PB20K-20K" }] },
+    { brand: "Boat", cat: "Power Banks", name: "VoltPod 10K", sku: "BOAT-VP10K", price: 1890, mrp: 2290, stock: 220,
+      variantOptions: ["Capacity"], variants: [{ attributes: [{ name: "Capacity", value: "10000 mAh" }], price: 1890, mrp: 2290, stock: 220, sku: "BOAT-VP10K-10K" }] },
+    { brand: "OnePlus", cat: "Power Banks", name: "Power Bank", sku: "ONEPLUS-PB", price: 2990, mrp: 3490, stock: 170,
+      variantOptions: ["Capacity"], variants: [{ attributes: [{ name: "Capacity", value: "10000 mAh" }], price: 2990, mrp: 3490, stock: 170, sku: "ONEPLUS-PB-10K" }] },
+    { brand: "Sony", cat: "Power Banks", name: "NP-F battery 15000", sku: "SONY-PB15K", price: 4290, mrp: 4990, stock: 130,
+      variantOptions: ["Capacity"], variants: [{ attributes: [{ name: "Capacity", value: "15000 mAh" }], price: 4290, mrp: 4990, stock: 130, sku: "SONY-PB15K-15K" }] },
+    { brand: "LG", cat: "Power Banks", name: "High Capacity 30000", sku: "LG-PB30K", price: 4990, mrp: 5990, stock: 100,
+      variantOptions: ["Capacity"], variants: [{ attributes: [{ name: "Capacity", value: "30000 mAh" }], price: 4990, mrp: 5990, stock: 100, sku: "LG-PB30K-30K" }] },
+    { brand: "Nokia", cat: "Power Banks", name: "Power UP 10K", sku: "NOKIA-PW10K", price: 1990, mrp: 2490, stock: 210,
+      variantOptions: ["Capacity"], variants: [{ attributes: [{ name: "Capacity", value: "10000 mAh" }], price: 1990, mrp: 2490, stock: 210, sku: "NOKIA-PW10K-10K" }] },
+    { brand: "Google", cat: "Power Banks", name: "Nest Hub Power", sku: "GOOGLE-PWR", price: 3490, mrp: 3990, stock: 160,
+      variantOptions: ["Capacity"], variants: [{ attributes: [{ name: "Capacity", value: "10000 mAh" }], price: 3490, mrp: 3990, stock: 160, sku: "GOOGLE-PWR-10K" }] },
 
-    // Laptops
-    { name: "VORTIX UltraBook", catKey: "laptops", brand: "VORTIX", variantOptions: ["RAM", "Storage"], basePrice: 59990, baseMRP: 69990, baseStock: 15 },
-    { name: "VORTIX Gaming Pro", catKey: "laptops", brand: "VORTIX", variantOptions: ["RAM", "Storage"], basePrice: 89990, baseMRP: 99990, baseStock: 10 },
-    { name: "SpeedNote 14", catKey: "laptops", brand: "SpeedNote", variantOptions: ["RAM", "Storage"], basePrice: 45990, baseMRP: 52990, baseStock: 25 },
-    { name: "WorkMate Pro", catKey: "laptops", brand: "WorkMate", variantOptions: ["RAM", "Storage"], basePrice: 52990, baseMRP: 62990, baseStock: 20 },
-    { name: "LiteBook Go", catKey: "laptops", brand: "LiteBook", variantOptions: ["RAM", "Storage"], basePrice: 39990, baseMRP: 45990, baseStock: 35 },
+    // === SPEAKERS (10) ===
+    { brand: "Samsung", cat: "Speakers", name: "Galaxy Go", sku: "SAMSUNG-GO", price: 8990, mrp: 11990, stock: 95,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "Black" }], price: 8990, mrp: 11990, stock: 95, sku: "SAMSUNG-GO-BLK" }] },
+    { brand: "Apple", cat: "Speakers", name: "HomePod mini", sku: "APPLE-HPM", price: 19990, mrp: 24990, stock: 85,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "Yellow" }], price: 19990, mrp: 24990, stock: 85, sku: "APPLE-HPM-YEL" }] },
+    { brand: "Xiaomi", cat: "Speakers", name: "Mini Speaker", sku: "XIAOMI-MS", price: 3990, mrp: 4990, stock: 130,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "White" }], price: 3990, mrp: 4990, stock: 130, sku: "XIAOMI-MS-WHT" }] },
+    { brand: "acer", cat: "Speakers", name: "AirSound Mini", sku: "ACER-ASM", price: 5490, mrp: 6990, stock: 100,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "Grey" }], price: 5490, mrp: 6990, stock: 100, sku: "ACER-ASM-GRY" }] },
+    { brand: "Boat", cat: "Speakers", name: "Stone SpinX", sku: "BOAT-SSX", price: 6990, mrp: 8990, stock: 75,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "Red" }], price: 6990, mrp: 8990, stock: 75, sku: "BOAT-SSX-RED" }] },
+    { brand: "OnePlus", cat: "Speakers", name: "Portable X", sku: "ONEPLUS-PX", price: 7990, mrp: 9990, stock: 80,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "Green" }], price: 7990, mrp: 9990, stock: 80, sku: "ONEPLUS-PX-GRN" }] },
+    { brand: "Sony", cat: "Speakers", name: "SRS-XB43", sku: "SONY-SXB43", price: 22990, mrp: 26990, stock: 50,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "Black" }], price: 22990, mrp: 26990, stock: 50, sku: "SONY-SXB43-BLK" }] },
+    { brand: "LG", cat: "Speakers", name: "Xboom Go", sku: "LG-XBG", price: 12990, mrp: 14990, stock: 65,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "Silver" }], price: 12990, mrp: 14990, stock: 65, sku: "LG-XBG-SLV" }] },
+    { brand: "Nokia", cat: "Speakers", name: "Wireless Boombox", sku: "NOKIA-WB", price: 7490, mrp: 8990, stock: 90,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "Black" }], price: 7490, mrp: 8990, stock: 90, sku: "NOKIA-WB-BLK" }] },
+    { brand: "Google", cat: "Speakers", name: "Nest Audio", sku: "GOOGLE-NA", price: 11990, mrp: 14990, stock: 70,
+      variantOptions: ["Colour"], variants: [{ attributes: [{ name: "Colour", value: "Charcoal" }], price: 11990, mrp: 14990, stock: 70, sku: "GOOGLE-NA-CHL" }] },
+
+    // === LAPTOPS (10) ===
+    { brand: "Samsung", cat: "Laptops", name: "Galaxy Book3 Pro", sku: "SAMSUNG-GB3P", price: 119990, mrp: 139990, stock: 22,
+      variantOptions: ["RAM","Storage"], variants: [{ attributes: [{ name: "RAM", value: "16 GB" }, { name: "Storage", value: "512 GB" }], price: 119990, mrp: 139990, stock: 22, sku: "SAMSUNG-GB3P-16512" }] },
+    { brand: "Apple", cat: "Laptops", name: "MacBook Air M2", sku: "APPLE-MBAM2", price: 149990, mrp: 164990, stock: 18,
+      variantOptions: ["RAM","Storage"], variants: [{ attributes: [{ name: "RAM", value: "8 GB" }, { name: "Storage", value: "256 GB" }], price: 149990, mrp: 164990, stock: 18, sku: "APPLE-MBAM2-8256" }] },
+    { brand: "Xiaomi", cat: "Laptops", name: "Notebook Pro", sku: "XIAOMI-NP", price: 85990, mrp: 99990, stock: 30,
+      variantOptions: ["RAM","Storage"], variants: [{ attributes: [{ name: "RAM", value: "16 GB" }, { name: "Storage", value: "512 GB" }], price: 85990, mrp: 99990, stock: 30, sku: "XIAOMI-NP-16512" }] },
+    { brand: "acer", cat: "Laptops", name: "Swift Go 14", sku: "ACER-SG14", price: 79990, mrp: 89990, stock: 25,
+      variantOptions: ["RAM","Storage"], variants: [{ attributes: [{ name: "RAM", value: "8 GB" }, { name: "Storage", value: "512 GB" }], price: 79990, mrp: 89990, stock: 25, sku: "ACER-SG14-8512" }] },
+    { brand: "Boat", cat: "Laptops", name: "Notebook Pro", sku: "BOAT-NBK", price: 65990, mrp: 74990, stock: 35,
+      variantOptions: ["RAM","Storage"], variants: [{ attributes: [{ name: "RAM", value: "8 GB" }, { name: "Storage", value: "512 GB" }], price: 65990, mrp: 74990, stock: 35, sku: "BOAT-NBK-8512" }] },
+    { brand: "OnePlus", cat: "Laptops", name: "Book One", sku: "ONEPLUS-BOOK", price: 109990, mrp: 124990, stock: 20,
+      variantOptions: ["RAM","Storage"], variants: [{ attributes: [{ name: "RAM", value: "16 GB" }, { name: "Storage", value: "1 TB" }], price: 109990, mrp: 124990, stock: 20, sku: "ONEPLUS-BOOK-161T" }] },
+    { brand: "Sony", cat: "Laptops", name: "Vaio Z", sku: "SONY-VZ", price: 189990, mrp: 209990, stock: 12,
+      variantOptions: ["RAM","Storage"], variants: [{ attributes: [{ name: "RAM", value: "32 GB" }, { name: "Storage", value: "1 TB" }], price: 189990, mrp: 209990, stock: 12, sku: "SONY-VZ-321T" }] },
+    { brand: "LG", cat: "Laptops", name: "Gram 16Z", sku: "LG-G16Z", price: 169990, mrp: 184990, stock: 15,
+      variantOptions: ["RAM","Storage"], variants: [{ attributes: [{ name: "RAM", value: "16 GB" }, { name: "Storage", value: "1 TB" }], price: 169990, mrp: 184990, stock: 15, sku: "LG-G16Z-161T" }] },
+    { brand: "Nokia", cat: "Laptops", name: "Booklet 13", sku: "NOKIA-BL13", price: 59990, mrp: 69990, stock: 40,
+      variantOptions: ["RAM","Storage"], variants: [{ attributes: [{ name: "RAM", value: "8 GB" }, { name: "Storage", value: "256 GB" }], price: 59990, mrp: 69990, stock: 40, sku: "NOKIA-BL13-8256" }] },
+    { brand: "Google", cat: "Laptops", name: "Pixelbook Go", sku: "GOOGLE-PBH", price: 119990, mrp: 134990, stock: 28,
+      variantOptions: ["RAM","Storage"], variants: [{ attributes: [{ name: "RAM", value: "8 GB" }, { name: "Storage", value: "128 GB" }], price: 119990, mrp: 134990, stock: 28, sku: "GOOGLE-PBH-8128" }] },
   ];
 
-  // Additional 25 products (5 per category) - variants with different specs
-  const productTemplatesPart2 = [
-    // Mobile phones (different price points)
-    { name: "VORTIX X1 Lite", catKey: "mobiles", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 19990, baseMRP: 23990, baseStock: 80 },
-    { name: "VORTIX X2 Max", catKey: "mobiles", brand: "VORTIX", variantOptions: ["Colour", "Storage"], basePrice: 39990, baseMRP: 44990, baseStock: 25 },
-    { name: "VORTIX A5", catKey: "mobiles", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 14990, baseMRP: 17990, baseStock: 100 },
-    { name: "PowerMax P2", catKey: "mobiles", brand: "PowerMax", variantOptions: ["Colour"], basePrice: 12990, baseMRP: 15990, baseStock: 70 },
-    { name: "Connct Y", catKey: "mobiles", brand: "SmartConnect", variantOptions: ["Colour"], basePrice: 9990, baseMRP: 12990, baseStock: 120 },
-
-    // Headphones (different models)
-    { name: "VORTIX Beat 2", catKey: "headphones", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 1999, baseMRP: 2999, baseStock: 60 },
-    { name: "VORTIX SoundMax", catKey: "headphones", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 3999, baseMRP: 4999, baseStock: 40 },
-    { name: "BassPro Deluxe", catKey: "headphones", brand: "BassBox", variantOptions: ["Colour"], basePrice: 2499, baseMRP: 3299, baseStock: 50 },
-    { name: "TruFit TWS", catKey: "headphones", brand: "EchoFit", variantOptions: ["Colour"], basePrice: 699, baseMRP: 899, baseStock: 150 },
-    { name: "HomeTheater 5.1", catKey: "headphones", brand: "StudioSound", variantOptions: ["Colour"], basePrice: 1799, baseMRP: 2299, baseStock: 35 },
-
-    // Power Banks (higher capacity)
-    { name: "VORTIX Power 30000", catKey: "power-banks", brand: "VORTIX", variantOptions: ["Capacity"], basePrice: 2999, baseMRP: 3499, baseStock: 25 },
-    { name: "SolarCharge 15K", catKey: "power-banks", brand: "QuickPower", variantOptions: ["Capacity"], basePrice: 1599, baseMRP: 1999, baseStock: 90 },
-    { name: " turboPower 5K", catKey: "power-banks", brand: "EnergyBoost", variantOptions: ["Capacity"], basePrice: 799, baseMRP: 999, baseStock: 200 },
-    { name: "HeavyDuty 30K", catKey: "power-banks", brand: "ChargeMaster", variantOptions: ["Capacity"], basePrice: 3299, baseMRP: 3999, baseStock: 20 },
-    { name: "Compact 5000", catKey: "power-banks", brand: "PowerMax", variantOptions: ["Capacity"], basePrice: 699, baseMRP: 899, baseStock: 180 },
-
-    // Speakers (different styles)
-    { name: "VORTIX MiniSound", catKey: "speakers", brand: "VORTIX", variantOptions: ["Colour"], basePrice: 1299, baseMRP: 1799, baseStock: 100 },
-    { name: "Wireless Beam", catKey: "speakers", brand: "PartyLoud", variantOptions: ["Colour"], basePrice: 2499, baseMRP: 2999, baseStock: 45 },
-    { name: "StudioMonitor 2", catKey: "speakers", brand: "BassBox", variantOptions: ["Colour"], basePrice: 1999, baseMRP: 2499, baseStock: 60 },
-    { name: "PodcastMic Set", catKey: "speakers", brand: "ClearTone", variantOptions: ["Colour"], basePrice: 899, baseMRP: 1299, baseStock: 120 },
-    { name: "BassJack 10", catKey: "speakers", brand: "PartyLoud", variantOptions: ["Colour"], basePrice: 3499, baseMRP: 3999, baseStock: 30 },
-
-    // Laptops (different configs)
-    { name: "VORTIX UltraLight", catKey: "laptops", brand: "VORTIX", variantOptions: ["RAM", "Storage"], basePrice: 45990, baseMRP: 52990, baseStock: 30 },
-    { name: "VORTIX WorkStation", catKey: "laptops", brand: "VORTIX", variantOptions: ["RAM", "Storage"], basePrice: 79990, baseMRP: 89990, baseStock: 12 },
-    { name: "NoteBook Go", catKey: "laptops", brand: "SpeedNote", variantOptions: ["RAM", "Storage"], basePrice: 35990, baseMRP: 42990, baseStock: 45 },
-    { name: "CreatorPro 16", catKey: "laptops", brand: "WorkMate", variantOptions: ["RAM", "Storage"], basePrice: 65990, baseMRP: 74990, baseStock: 18 },
-    { name: "EduBook SE", catKey: "laptops", brand: "LiteBook", variantOptions: ["RAM", "Storage"], basePrice: 29990, baseMRP: 35990, baseStock: 55 },
-  ];
-
-  const variantAttrs = {
-    Colour: ["Midnight Black", "Electric Lime", "Arctic White", "Sunset Red"],
-    Storage: ["128 GB", "256 GB", "512 GB"],
-    Capacity: ["10000 mAh", "20000 mAh", "30000 mAh"],
-    RAM: ["8 GB", "16 GB", "32 GB"],
-  };
-
-  // map catKey to display tag
-  const catTags = {
-    mobiles: "mobiles", headphones: "headphones", "power-banks": "power-banks",
-    speakers: "speakers", laptops: "laptops"
-  };
-
-  const productTemplates = [...productTemplatesPart1, ...productTemplatesPart2];
   let created = 0;
-  for (let i = 0; i < productTemplates.length; i++) {
-    const t = productTemplates[i];
-    const catKey = t.catKey;
-    const attrList = variantAttrs[t.variantOptions?.[0] || "Colour"] || ["Default"];
+  for (let i = 0; i < products.length; i++) {
+    const p = products[i];
+    const catKey = key(p.cat);
+    const tag = catMap[catKey] ? catKey : "electronics";
 
-    // use pre-mapped tag (support both part1 catKey and part2 catKey variants)
-    const baseTag = catTags[catKey] || (catKey.endsWith("2") ? catTags[catKey.slice(0, -1)] : "");
-    const tag = baseTag || "electronics";
-
-    const variants = [];
-    const numVariants = Math.min(3, attrList.length);
-    for (let v = 0; v < numVariants; v++) {
-      const variantPrice = t.basePrice + (v * 200);
-      const variantMRP = t.baseMRP + (v * 300);
-      variants.push({
-        attributes: [{ name: t.variantOptions?.[0] || "Colour", value: attrList[v], hex: v === 0 ? "#15191f" : "" }],
-        price: variantPrice,
-        mrp: variantMRP,
-        stock: Math.max(0, t.baseStock - v * 10),
-        sku: `V${String(i).padStart(2, "0")}${String(v).padStart(2, "0")}`,
+    // build variants: use product-defined variants if present, otherwise generate from variantOptions
+    let variants = [];
+    if (p.variants && p.variants.length > 0) {
+      // use exactly the defined variants, project sku from sku if present
+      p.variants.forEach((v, vi) => {
+        variants.push({
+          attributes: v.attributes || [],
+          price: v.price || p.price,
+          mrp: v.mrp || p.mrp,
+          stock: v.stock !== undefined ? v.stock : Math.max(0, p.stock - vi),
+          sku: v.sku || `${p.sku}-${String(vi).padStart(2, "0")}`,
+        });
       });
+    } else {
+      // generate simple variants from variantOptions
+      const opts = p.variantOptions || ["Colour"];
+      for (let v = 0; v < 3; v++) {
+        const attrName = opts[0] || "Colour";
+        const valList = variantAttrs[attrName] || ["Black"];
+        variants.push({
+          attributes: [{ name: attrName, value: valList[v % valList.length] }],
+          price: p.price,
+          mrp: p.mrp,
+          stock: Math.max(0, p.stock - v * 10),
+          sku: `${p.sku}-${String(v).padStart(2, "0")}`,
+        });
+      }
     }
 
-    const image = { url: `/vortix-demo-${String(i).padStart(2, "0")}.svg`, publicId: `vortix-demo-${String(i).padStart(2, "0")}`, alt: t.name };
-    let resolvedCat = catMap[catKey];
-    if (!resolvedCat && catKey.endsWith("2")) resolvedCat = catMap[catKey.slice(0, -1)];
-    if (!resolvedCat) resolvedCat = null;
+    const image = { url: `/vortix-demo-${String(i).padStart(2, "0")}.svg`, publicId: `vortix-demo-${String(i).padStart(2, "0")}`, alt: p.name };
+    const resolvedCat = catMap[catKey] || null;
     const payload = {
-      name: t.name,
-      slug: t.name.toLowerCase().replace(/\s+/g, "-") + "-" + i,
-      shortDescription: `${t.name} - premium ${tag} experience`,
-      description: `VORTIX quality ${tag}. Premium features and reliable performance.`,
+      name: p.name,
+      slug: p.name.toLowerCase().replace(/\s+/g, "-") + "-" + i,
+      shortDescription: `${p.name} - premium ${tag} experience`,
+      description: `Leading ${tag} quality from ${p.brand}. Reliable performance and trusted build.`,
       category: resolvedCat,
-      brand: brand._id,
+      brand: brandMap[key(p.brand)] || null,
       gstPercent: 18,
-      price: t.basePrice,
-      mrp: t.baseMRP,
-      stock: t.baseStock,
-      variantOptions: t.variantOptions || ["Colour"],
+      price: p.price,
+      mrp: p.mrp,
+      stock: p.stock,
+      variantOptions: p.variantOptions || ["Colour"],
       variants: variants,
       images: [image],
       highlights: [{ name: "Quality", value: "Premium construction" }, { name: "Warranty", value: "1 year manufacturer warranty" }],
-      keyFeatures: [`${t.name} - key feature ${i}`],
-      boxContents: [t.name, "Manual", "Warranty card"],
+      keyFeatures: [`${p.name} - key feature ${i}`],
+      boxContents: [p.name, "Manual", "Warranty card"],
       warrantyPeriod: "1 year",
       warrantyType: "Manufacturer warranty",
-      weightGrams: 150 + (i * 10),
+      weightGrams: 1500 + (i * 50),
       codAvailable: true,
       isPublished: false,
       isBlocked: false,
@@ -186,7 +229,6 @@ async function seedDemoProducts() {
       tags: [tag, "electronics"],
     };
 
-    // Upsert by slug
     const exists = await Product.findOne({ slug: payload.slug });
     if (exists) {
       Object.assign(exists, payload);
@@ -198,7 +240,7 @@ async function seedDemoProducts() {
     console.log(`Product ${created}: ${payload.name} (${payload.slug})`);
   }
 
-  console.log(`\n${created} demo products seeded successfully.`);
+  console.log(`\n${created} original-brand demo products seeded successfully.`);
   console.log("Visit: /products to view the storefront list.\n");
   mongoose.disconnect();
 }
